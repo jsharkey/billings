@@ -79,19 +79,19 @@ areas:
   house:            {name: Whole house,            floor: house, scale: 1.0, tags: [house]}
 
   main_kitchen:     {name: Kitchen,                floor: main,  scale: 1.2, tags: [kitchen, wet]}
-  main_dining:      {name: Dining room,            floor: main,  scale: 0.9, tags: [builtin]}
+  main_dining:      {name: Dining room,            floor: main,  scale: 0.9, tags: []}
   main_living:      {name: Living room,            floor: main,  scale: 1.2, tags: []}
   main_foyer:       {name: Foyer & coat closet,    floor: main,  scale: 0.6, tags: []}
   main_laundry:     {name: Laundry room,           floor: main,  scale: 0.6, tags: [laundry, wet]}
-  main_pantry:      {name: Walk-in pantry,         floor: main,  scale: 0.4, tags: [builtin]}
-  main_mud:         {name: Mud room & key drop,    floor: main,  scale: 0.5, tags: [builtin]}
+  main_pantry:      {name: Walk-in pantry,         floor: main,  scale: 0.4, tags: []}
+  main_mud:         {name: Mud room & key drop,    floor: main,  scale: 0.5, tags: []}
   main_hall_bath:   {name: Hall bath (north),      floor: main,  scale: 0.6, tags: [bath, wet, tub]}
   main_ens_bath:    {name: Ensuite bath & WIC (south), floor: main, scale: 0.8, tags: [bath, wet, shower]}
   main_bed1:        {name: Bedroom 1 / nursery (north), floor: main, scale: 0.9, tags: [bedroom]}
   main_bed2:        {name: Ensuite bedroom 2 (south), floor: main, scale: 1.0, tags: [bedroom]}
 
-  bsmt_office:      {name: Home office,            floor: bsmt,  scale: 0.9, tags: [builtin]}
-  bsmt_play:        {name: Play room,              floor: bsmt,  scale: 1.1, tags: [builtin]}
+  bsmt_office:      {name: Home office,            floor: bsmt,  scale: 0.9, tags: []}
+  bsmt_play:        {name: Play room,              floor: bsmt,  scale: 1.1, tags: []}
   bsmt_storage:     {name: Storage room,           floor: bsmt,  scale: 0.6, tags: []}
   bsmt_game:        {name: Game room,              floor: bsmt,  scale: 1.1, tags: []}
   bsmt_family:      {name: Family room,            floor: bsmt,  scale: 1.4, tags: []}
@@ -108,6 +108,13 @@ areas:
 # `scaled: true` multiplies effort by the area's scale.
 # ---------------------------------------------------------------------------
 templates:
+  demo:
+    label: Demolition
+    scaled: true
+    items:
+      demo: 1.0
+      haul_off: 0.25
+
   fram:
     label: Framing
     scaled: true
@@ -144,7 +151,7 @@ templates:
     label: HVAC rough
     items:
       supply_run: 0.5
-      return_run: {effort: 0.25, tags: [bedroom, builtin]}
+      return_run: {effort: 0.25, tags: [bedroom]}
       bath_fan_duct: {effort: 0.5, tags: [bath]}
       hood_duct: {effort: 0.5, tags: [kitchen]}
       dryer_vent: {effort: 0.5, tags: [laundry]}
@@ -210,19 +217,6 @@ templates:
       floor_tile: 1.0
       grout_seal: 0.5
 
-  backsplash:
-    label: Backsplash
-    items:
-      backsplash: 1.0
-
-  cabs:
-    label: Cabinets & built-ins
-    items:
-      kitchen_cabinets: {effort: 2.0, tags: [kitchen]}
-      laundry_cabinets: {effort: 0.5, tags: [laundry]}
-      vanity: {effort: 0.5, tags: [bath]}
-      builtins: {effort: 1.0, tags: [builtin]}
-
   flor:
     label: Flooring
     scaled: true
@@ -264,12 +258,14 @@ templates:
 # ---------------------------------------------------------------------------
 tasks:
   # --- Framing -------------------------------------------------------------
-  - {id: demo_all,          name: Demolition,                   section: Framing, crew: owner, effort: 1, progress: 1}
+  - {id: demo_all,          name: Demolition - all other areas, section: Framing, crew: owner, effort: 1, progress: 1}
+  - {id: demo_main_laundry, name: Demolition - laundry & pantry, section: Framing, crew: owner, template: demo, areas: [main_laundry, main_pantry]}
   - {id: fram_main_beds,    name: Framing - main bedrooms,      section: Framing, crew: owner, template: fram, areas: [main_bed1, main_bed2], after: [demo_all]}
   - {id: fram_main_n_bath,  name: Framing - main hall bath,     section: Framing, crew: owner, template: fram, areas: [main_hall_bath], after: [demo_all]}
   - {id: fram_main_s_bath,  name: Framing - main ensuite bath,  section: Framing, crew: owner, template: fram, areas: [main_ens_bath], after: [demo_all]}
   - {id: fram_main_kitchen, name: Framing - kitchen,            section: Framing, crew: owner, template: fram, areas: [main_kitchen], after: [demo_all]}
-  - {id: fram_main_laundry, name: Framing - laundry & pantry,   section: Framing, crew: owner, template: fram, areas: [main_laundry, main_pantry], after: [demo_all]}
+  - {id: fram_main_laundry, name: Framing - laundry & pantry,   section: Framing, crew: owner, template: fram, areas: [main_laundry, main_pantry], after: [demo_main_laundry]}
+  - {id: fram_main_living,  name: Framing - living room,        section: Framing, crew: owner, template: fram, areas: [main_living], after: [demo_all]}
   - {id: fram_bsmt_west,    name: Framing - basement west,      section: Framing, crew: owner, template: fram, areas: [bsmt_office, bsmt_play, bsmt_storage, bsmt_game], after: [demo_all]}
 
   # --- Plumbing rough ------------------------------------------------------
@@ -281,33 +277,33 @@ tasks:
   - {id: plum_bsmt_baths,   name: Plumbing rough - basement baths, section: Plumbing, crew: owner, template: plum_rough, areas: [bsmt_hall_bath, bsmt_ens_bath], after: [plum_house]}
   - {id: plum_bsmt_kitchenette, name: Plumbing rough - kitchenette, section: Plumbing, crew: owner, template: plum_rough, areas: [bsmt_kitchenette], after: [plum_house]}
 
-  # --- HVAC & low-voltage rough (owner) ------------------------------------
-  - {id: hvac_house,        name: HVAC - trunk & equipment,     section: HVAC & low-voltage, crew: owner, template: hvac_main, areas: [house], after: [demo_all]}
+  # --- HVAC rough (owner) -------------------------------------------------
+  - {id: hvac_house,        name: HVAC - trunk & equipment,     section: HVAC, crew: owner, template: hvac_main, areas: [house], after: [demo_all]}
   - id: hvac_main
     name: HVAC rough - main floor
-    section: HVAC & low-voltage
+    section: HVAC
     crew: owner
     template: hvac_rough
     areas: [main_kitchen, main_dining, main_living, main_foyer, main_laundry, main_mud, main_hall_bath, main_ens_bath, main_bed1, main_bed2]
-    after: [hvac_house, fram_main_s_bath, fram_main_kitchen, fram_main_laundry]
+    after: [hvac_house, fram_main_s_bath, fram_main_kitchen, fram_main_laundry, fram_main_living]
   - id: hvac_bsmt_east
     name: HVAC rough - basement east
-    section: HVAC & low-voltage
+    section: HVAC
     crew: owner
     template: hvac_rough
     areas: [bsmt_family, bsmt_kitchenette, bsmt_hall_bath, bsmt_ens_bath, bsmt_bed1, bsmt_bed2]
     after: [hvac_house]
   - id: hvac_bsmt_west
     name: HVAC rough - basement west
-    section: HVAC & low-voltage
+    section: HVAC
     crew: owner
     template: hvac_rough
     areas: [bsmt_office, bsmt_play, bsmt_storage, bsmt_game]
     after: [hvac_house, fram_bsmt_west]
   - id: lowv_all
     name: Low-voltage rough
-    section: HVAC & low-voltage
-    crew: owner
+    section: Electrical
+    crew: elec
     template: lowv
     areas: [house, main_kitchen, main_living, main_bed1, main_bed2, bsmt_office, bsmt_play, bsmt_game, bsmt_family, bsmt_bed1, bsmt_bed2]
     after: [elec_main, elec_bsmt_east, elec_bsmt_west]
@@ -341,7 +337,7 @@ tasks:
     name: Rough inspection
     section: Inspections
     inspection: county
-    after: [fram_main_beds, fram_main_n_bath, fram_main_s_bath, fram_main_kitchen, fram_main_laundry, fram_bsmt_west,
+    after: [fram_main_beds, fram_main_n_bath, fram_main_s_bath, fram_main_kitchen, fram_main_laundry, fram_main_living, fram_bsmt_west,
             plum_main_kitchen, plum_main_n_bath, plum_main_s_bath, plum_main_laundry, plum_bsmt_baths, plum_bsmt_kitchenette,
             hvac_main, hvac_bsmt_east, hvac_bsmt_west, lowv_all, elec_panel]
 
@@ -395,37 +391,21 @@ tasks:
     after: [dryw_fin_bsmt]
   - {id: tile_main_baths,   name: Tile - main baths,            section: Finishes, crew: owner, template: tile, areas: [main_hall_bath, main_ens_bath], after: [dryw_fin_main]}
   - {id: tile_bsmt_baths,   name: Tile - basement baths,        section: Finishes, crew: owner, template: tile, areas: [bsmt_hall_bath, bsmt_ens_bath], after: [dryw_fin_bsmt]}
-  - id: cabs_main
-    name: Cabinets & built-ins - main floor
-    section: Finishes
-    crew: owner
-    template: cabs
-    areas: [main_kitchen, main_dining, main_laundry, main_pantry, main_mud, main_hall_bath, main_ens_bath]
-    after: [pant_main, tile_main_baths]
-  - id: cabs_bsmt
-    name: Cabinets & built-ins - basement
-    section: Finishes
-    crew: owner
-    template: cabs
-    areas: [bsmt_kitchenette, bsmt_office, bsmt_play, bsmt_hall_bath, bsmt_ens_bath]
-    after: [pant_bsmt, tile_bsmt_baths]
-  - {id: ctop_fab,          name: Countertops - template & fabrication, section: Finishes, lag: 14, after: [cabs_main, cabs_bsmt]}
-  - {id: ctop_install,      name: Countertops - install,        section: Finishes, lag: 1, after: [ctop_fab]}
-  - {id: tile_backsplash,   name: Tile - backsplashes,          section: Finishes, crew: owner, template: backsplash, areas: [main_kitchen, bsmt_kitchenette], after: [ctop_install]}
+  - {id: ctop_install,      name: Countertops - install (vendor), section: Finishes, lag: 1, after: [pant_main, pant_bsmt, tile_main_baths, tile_bsmt_baths]}
   - id: flor_main
     name: Flooring - main floor
     section: Finishes
     crew: flor
     template: flor
     areas: [main_kitchen, main_dining, main_living, main_foyer, main_laundry, main_pantry, main_mud, main_bed1, main_bed2]
-    after: [pant_main, cabs_main]
+    after: [pant_main]
   - id: flor_bsmt
     name: Flooring - basement
     section: Finishes
     crew: flor
     template: flor
     areas: [bsmt_office, bsmt_play, bsmt_storage, bsmt_game, bsmt_family, bsmt_kitchenette, bsmt_bed1, bsmt_bed2]
-    after: [pant_bsmt, cabs_bsmt]
+    after: [pant_bsmt]
   - id: trim_main
     name: Doors & trim - main floor
     section: Finishes
@@ -457,7 +437,7 @@ tasks:
     template: elec_trim
     areas: [house, main_kitchen, main_dining, main_living, main_foyer, main_laundry, main_pantry, main_mud, main_hall_bath, main_ens_bath, main_bed1, main_bed2,
             bsmt_office, bsmt_play, bsmt_storage, bsmt_game, bsmt_family, bsmt_kitchenette, bsmt_mech, bsmt_hall_bath, bsmt_ens_bath, bsmt_bed1, bsmt_bed2]
-    after: [pant_main, pant_bsmt, cabs_main, cabs_bsmt]
+    after: [pant_main, pant_bsmt]
   - id: hvac_trim
     name: HVAC trim
     section: Trim-out
@@ -469,7 +449,7 @@ tasks:
 
   # --- Closeout ---------------------------------------------------------------
   - {id: insp_final,        name: Final inspection,             section: Inspections, inspection: county, after: [plum_trim, elec_trim, hvac_trim, rail_stair]}
-  - {id: pant_touchup,      name: Paint touch-up,               section: Closeout, crew: pant, effort: 2, after: [trim_main, trim_bsmt, tile_backsplash]}
+  - {id: pant_touchup,      name: Paint touch-up,               section: Closeout, crew: pant, effort: 2, after: [trim_main, trim_bsmt]}
   - {id: punch_clean,       name: Punch list & clean,           section: Closeout, crew: owner, effort: 3, after: [pant_touchup, insp_final]}
   - {id: mile_movein,       name: Move-in,                      section: Closeout, milestone: true, after: [punch_clean]}
 
@@ -487,7 +467,8 @@ status:
   main_bed2:      {fram: done}
   main_hall_bath: {fram: done, plum_rough: 0.5}
   main_ens_bath:  {fram: 0.5}
-  main_kitchen:   {fram: 0.5, plum_rough: done, elec_rough: 0.5}
+  main_kitchen:   {fram: done, plum_rough: done, elec_rough: 0.5}
+  main_living:    {fram: 0.5}
 
   bsmt_hall_bath: {plum_rough: 0.5}
   bsmt_ens_bath:  {plum_rough: 0.5}

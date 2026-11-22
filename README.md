@@ -32,7 +32,7 @@ an edit made in GitHub's web editor).
 
 - Effort is in crew-days, set per checklist item in `templates:` (optionally scaled
   by each area's `scale`). Remaining work = effort x (1 - progress).
-- Each crew has its own calendar: the owner works Sat/Sun; the electrical, drywall,
+- Each crew has its own calendar: the owner works Sat/Sun; the electrical (incl. low-voltage), drywall,
   paint and flooring crews work Mon-Fri (minus `holidays`) in parallel.
 - Each crew works one task at a time, picking the ready task with the longest
   remaining chain to move-in. Several small tasks can share one work day. Hand-offs
@@ -49,8 +49,8 @@ an edit made in GitHub's web editor).
 | `demo_` | demolition | `insl_` | insulation |
 | `fram_` | framing | `dryw_` | drywall |
 | `plum_` | plumbing | `tile_` | tile |
-| `elec_` | electrical | `cabs_` | cabinets & built-ins |
-| `hvac_` | heating/ventilation | `ctop_` | countertops |
-| `lowv_` | low-voltage | `flor_` | flooring |
-| `insp_` | inspections | `pant_` | paint |
-| `mile_` | milestones | `trim_` | doors & trim |
+| `elec_` | electrical | `ctop_` | countertops |
+| `hvac_` | heating/ventilation | `flor_` | flooring |
+| `lowv_` | low-voltage | `pant_` | paint |
+| `insp_` | inspections | `trim_` | doors & trim |
+| `mile_` | milestones | | |
