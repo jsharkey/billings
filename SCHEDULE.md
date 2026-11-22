@@ -21,12 +21,6 @@ gantt
     axisFormat %b %y
     tickInterval 1month
     todayMarker off
-    section Completed by Nov 22
-    Demolition - all other areas :done, demo_all, 2026-01-01 08:00, 2026-11-22 16:00
-    Framing - main bedrooms :done, fram_main_beds, 2026-01-01 08:00, 2026-11-22 16:00
-    Framing - main hall bath :done, fram_main_n_bath, 2026-01-01 08:00, 2026-11-22 16:00
-    Framing - kitchen :done, fram_main_kitchen, 2026-01-01 08:00, 2026-11-22 16:00
-    Plumbing rough - kitchen :done, plum_main_kitchen, 2026-01-01 08:00, 2026-11-22 16:00
     section Framing
     Demolition - laundry & pantry :crit, demo_main_laundry, 2026-11-28 08:00, 2026-11-29 10:00
     Framing - laundry & pantry :crit, fram_main_laundry, 2026-12-06 10:00, 2026-12-12 16:00

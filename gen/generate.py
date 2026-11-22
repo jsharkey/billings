@@ -397,7 +397,6 @@ def clean(name: str) -> str:
 
 def mermaid(cfg: dict, tasks: dict[str, Task]) -> str:
     proj = cfg["project"]
-    start = to_date(proj["start"])
     as_of = to_date(proj["as_of"])
     lines = [
         "gantt",
@@ -407,11 +406,8 @@ def mermaid(cfg: dict, tasks: dict[str, Task]) -> str:
         "    tickInterval 1month",
         "    todayMarker off",
     ]
-    done = [t for t in tasks.values() if t.done]
-    if done:
-        lines.append(f"    section Completed by {as_of.strftime('%b %d')}")
-        for t in done:
-            lines.append(f"    {clean(t.name)} :done, {t.id}, {ts(start, 0)}, {ts(as_of, 1.0)}")
+    # Completed work is listed in the task table, not drawn, so the chart
+    # starts at the status date.
     sections: dict[str, list[Task]] = {}
     for t in tasks.values():
         if not t.done:
