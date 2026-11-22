@@ -1,0 +1,6 @@
+#!/bin/sh
+# Regenerate SCHEDULE.md and docs/index.html from schedule.yaml before each commit.
+# Enable once per clone:  git config core.hooksPath .githooks
+set -e
+python3 gen/generate.py
+git add SCHEDULE.md docs/index.html
