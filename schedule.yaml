@@ -21,7 +21,7 @@ crews:
     capacity: 1.0            # crew-days of work per work day
   elec:
     name: Electrical crew
-    days: [mon, tue, wed, thu, fri]
+    days: [sat]
   dryw:
     name: Drywall crew
     days: [mon, tue, wed, thu, fri]
@@ -366,21 +366,21 @@ tasks:
     crew: elec
     template: elec_rough
     areas: [main_kitchen, main_dining, main_living, main_foyer, main_laundry, main_pantry, main_mud, main_hall_bath, main_ens_bath, main_bed1, main_bed2]
-    after: [hvac_main, plum_main_kitchen, plum_main_n_bath, plum_main_s_bath, plum_main_laundry]
+    after: []   # runs in parallel with framing/plumbing/HVAC
   - id: elec_bsmt_east
     name: Electrical rough - basement east
     section: Electrical
     crew: elec
     template: elec_rough
     areas: [bsmt_family, bsmt_kitchenette, bsmt_mech, bsmt_hall_bath, bsmt_ens_bath, bsmt_bed1, bsmt_bed2]
-    after: [hvac_bsmt_east, plum_bsmt_baths, plum_bsmt_kitchenette]
+    after: []   # runs in parallel with framing/plumbing/HVAC
   - id: elec_bsmt_west
     name: Electrical rough - basement west
     section: Electrical
     crew: elec
     template: elec_rough
     areas: [bsmt_office, bsmt_play, bsmt_storage, bsmt_game]
-    after: [hvac_bsmt_west]
+    after: [fram_bsmt_west]   # needs studs; not blocked on HVAC
   - {id: elec_panel,        name: Electrical - panel & circuits landed, section: Electrical, crew: elec, template: elec_panel, areas: [house], after: [elec_main, elec_bsmt_east, elec_bsmt_west]}
 
   # --- Rough inspection (all roughs inspected together) --------------------
