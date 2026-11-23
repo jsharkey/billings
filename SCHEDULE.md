@@ -18,7 +18,7 @@ Interactive view with room-by-room checklists: `docs/index.html`.
 gantt
     title May Residence Remodel - projected as of 2026-11-21
     dateFormat YYYY-MM-DD HH:mm
-    axisFormat %b '%y
+    axisFormat %b %Y
     tickInterval 1month
     todayMarker off
     section Framing
