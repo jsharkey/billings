@@ -405,7 +405,7 @@ def mermaid(cfg: dict, tasks: dict[str, Task]) -> str:
         "gantt",
         f"    title {clean(proj['title'])} - projected as of {as_of.isoformat()}",
         "    dateFormat YYYY-MM-DD HH:mm",
-        "    axisFormat %b %Y",
+        "    axisFormat %b '%y",
         "    tickInterval 1month",
         "    todayMarker off",
     ]
