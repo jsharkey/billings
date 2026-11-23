@@ -3,8 +3,8 @@
 Schedule and progress tracking for the May Residence whole-house remodel.
 
 - **[SCHEDULE.md](SCHEDULE.md)**: gantt chart, milestones and task table (rendered by GitHub).
-- **`docs/index.html`**: interactive page with the gantt plus room-by-room checklists.
-  Open it locally in a browser, or serve it with GitHub Pages.
+- **[Live page](https://jsharkey.github.io/billings/)** (`docs/index.html`): interactive gantt
+  plus room-by-room checklists, rebuilt and published to GitHub Pages on every push to `main`.
 - **[schedule.yaml](schedule.yaml)**: the source of truth. Edit this, never the generated files.
 
 ## Setup (once per clone)
