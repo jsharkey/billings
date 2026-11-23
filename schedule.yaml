@@ -88,29 +88,29 @@ inspections:
 areas:
   house:            {name: Whole house,            floor: house, scale: 1.0, tags: [house]}
 
-  main_kitchen:     {name: Kitchen,                floor: main,  scale: 1.2, tags: [kitchen, wet]}
+  main_kitchen:     {name: Kitchen,                floor: main,  scale: 1.2, tags: [kitchen, wet, lowv_drop]}
   main_dining:      {name: Dining room,            floor: main,  scale: 0.9, tags: []}
-  main_living:      {name: Living room,            floor: main,  scale: 1.2, tags: [ceiling_patch, finished_ceiling]}
+  main_living:      {name: Living room,            floor: main,  scale: 1.2, tags: [ceiling_patch, finished_ceiling, lowv_drop]}
   main_foyer:       {name: Foyer & coat closet,    floor: main,  scale: 0.6, tags: [finished_ceiling]}
   main_laundry:     {name: Laundry room,           floor: main,  scale: 0.6, tags: [laundry, wet, ceiling_new]}
   main_pantry:      {name: Walk-in pantry,         floor: main,  scale: 0.4, tags: [ceiling_new]}
   main_mud:         {name: Mud room & key drop,    floor: main,  scale: 0.5, tags: [ceiling_new]}
   main_hall_bath:   {name: Hall bath (north),      floor: main,  scale: 0.6, tags: [bath, wet, tub, ceiling_patch, finished_ceiling]}
   main_ens_bath:    {name: Ensuite bath & WIC (south), floor: main, scale: 0.8, tags: [bath, wet, shower, ceiling_patch, finished_ceiling, walk_in]}
-  main_bed1:        {name: Bedroom 1 / nursery (north), floor: main, scale: 0.9, tags: [bedroom, finished_ceiling]}
-  main_bed2:        {name: Ensuite bedroom 2 (south), floor: main, scale: 1.0, tags: [bedroom, ceiling_patch, finished_ceiling]}
+  main_bed1:        {name: Bedroom 1 / nursery (north), floor: main, scale: 0.9, tags: [bedroom, finished_ceiling, lowv_drop]}
+  main_bed2:        {name: Ensuite bedroom 2 (south), floor: main, scale: 1.0, tags: [bedroom, ceiling_patch, finished_ceiling, lowv_drop]}
 
-  bsmt_office:      {name: Home office,            floor: bsmt,  scale: 1.2,  tags: [ceiling_new, dbl_partition]}   # ~15'-10" x 10'-10"
-  bsmt_play:        {name: Play room,              floor: bsmt,  scale: 1.25, tags: [ceiling_new, dbl_partition]}   # ~16'-8" x 10'-10"
+  bsmt_office:      {name: Home office,            floor: bsmt,  scale: 1.2,  tags: [ceiling_new, dbl_partition, lowv_drop]}   # ~15'-10" x 10'-10"
+  bsmt_play:        {name: Play room,              floor: bsmt,  scale: 1.25, tags: [ceiling_new, dbl_partition, lowv_drop]}   # ~16'-8" x 10'-10"
   bsmt_storage:     {name: Storage room,           floor: bsmt,  scale: 0.9,  tags: [ceiling_new, dbl_partition]}   # ~14'-0" x 9'-6"
-  bsmt_game:        {name: Game room,              floor: bsmt,  scale: 1.25, tags: [ceiling_new, dbl_partition]}   # ~18'-10" x 9'-8"
-  bsmt_family:      {name: Family room,            floor: bsmt,  scale: 1.6,  tags: [ceiling_new, dbl_partition]}   # ~18' x 15', less stair & mech
+  bsmt_game:        {name: Game room,              floor: bsmt,  scale: 1.25, tags: [ceiling_new, dbl_partition, lowv_drop]}   # ~18'-10" x 9'-8"
+  bsmt_family:      {name: Family room,            floor: bsmt,  scale: 1.6,  tags: [ceiling_new, dbl_partition, lowv_drop]}   # ~18' x 15', less stair & mech
   bsmt_kitchenette: {name: Kitchenette,            floor: bsmt,  scale: 0.7, tags: [kitchen, wet, ceiling_new, dbl_partition]}
   bsmt_mech:        {name: Mechanical closet,      floor: bsmt,  scale: 0.3, tags: [mech, ceiling_new, dbl_partition]}
   bsmt_hall_bath:   {name: Basement hall bath,     floor: bsmt,  scale: 0.6, tags: [bath, wet, shower, ceiling_new]}
   bsmt_ens_bath:    {name: Basement ensuite bath,  floor: bsmt,  scale: 0.6, tags: [bath, wet, shower, ceiling_new, dbl_partition]}
-  bsmt_bed1:        {name: Basement bedroom 1,     floor: bsmt,  scale: 0.9, tags: [bedroom, ceiling_new, dbl_partition]}
-  bsmt_bed2:        {name: Basement ensuite bedroom 2, floor: bsmt, scale: 1.0, tags: [bedroom, ceiling_new, dbl_partition]}
+  bsmt_bed1:        {name: Basement bedroom 1,     floor: bsmt,  scale: 0.9, tags: [bedroom, ceiling_new, dbl_partition, lowv_drop]}
+  bsmt_bed2:        {name: Basement ensuite bedroom 2, floor: bsmt, scale: 1.0, tags: [bedroom, ceiling_new, dbl_partition, lowv_drop]}
 
 # ---------------------------------------------------------------------------
 # Checklist templates. Each item is `effort` (crew-days per area) or
@@ -181,8 +181,8 @@ templates:
   lowv:
     label: Low-voltage rough
     items:
-      data_coax: 0.25
-      structured_panel: {effort: 0.5, tags: [house]}
+      cat6: {effort: 0.15, tags: [lowv_drop]}       # Cat6 drop(s) + low-volt ring per room
+      patch_panel: {effort: 0.5, tags: [house]}     # home runs into patch panel / network location
 
   elec_rough:
     label: Electrical rough

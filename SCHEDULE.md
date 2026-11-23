@@ -43,8 +43,8 @@ gantt
     Electrical rough - main floor (14%) :active, elec_main, 2026-11-28 08:00, 2027-01-02 08:34
     Electrical rough - basement east (9%) :active, elec_bsmt_east, 2027-01-02 08:34, 2027-01-16 13:22
     Electrical rough - basement west :elec_bsmt_west, 2027-01-16 13:22, 2027-01-30 15:46
-    Low-voltage rough :lowv_all, 2027-01-30 15:46, 2027-02-27 09:46
-    Electrical - panel & circuits landed :elec_panel, 2027-02-27 09:46, 2027-03-06 13:46
+    Low-voltage rough :lowv_all, 2027-01-30 15:46, 2027-02-13 15:46
+    Electrical - panel & circuits landed :elec_panel, 2027-02-13 15:46, 2027-02-27 11:46
     section Inspections
     Rough inspection :milestone, crit, insp_rough, 2027-03-09 12:00, 0d
     Insulation inspection (energy rater) :milestone, crit, insp_insl, 2027-04-05 12:00, 0d
@@ -87,7 +87,7 @@ gantt
 | Crew | Work days remaining |
 |---|---|
 | Owner | 92.3 |
-| Electrical crew | 18.4 |
+| Electrical crew | 17.2 |
 | Drywall crew | 15.4 |
 | Paint crew | 10.4 |
 | Flooring crew | 6.4 |
@@ -118,11 +118,11 @@ Critical-path tasks (the chain that sets the move-in date) are marked **bold**.
 | `hvac_main` | **HVAC rough - main floor** | Owner | 7% | 7 | Sat Jan 30, 2027 | Sun Feb 21, 2027 |
 | `hvac_bsmt_east` | **HVAC rough - basement east** | Owner | 0% | 3 | Sun Feb 21, 2027 | Sat Mar 6, 2027 |
 | `hvac_bsmt_west` | **HVAC rough - basement west** | Owner | 0% | 1 | Sat Mar 6, 2027 | Sun Mar 7, 2027 |
-| `lowv_all` | Low-voltage rough | Electrical crew | 0% | 3.25 | Sat Jan 30, 2027 | Sat Feb 27, 2027 |
+| `lowv_all` | Low-voltage rough | Electrical crew | 0% | 2 | Sat Jan 30, 2027 | Sat Feb 13, 2027 |
 | `elec_main` | Electrical rough - main floor | Electrical crew | 14% | 5.07 | Sat Nov 28, 2026 | Sat Jan 2, 2027 |
 | `elec_bsmt_east` | Electrical rough - basement east | Electrical crew | 9% | 2.6 | Sat Jan 2, 2027 | Sat Jan 16, 2027 |
 | `elec_bsmt_west` | Electrical rough - basement west | Electrical crew | 0% | 2.3 | Sat Jan 16, 2027 | Sat Jan 30, 2027 |
-| `elec_panel` | Electrical - panel & circuits landed | Electrical crew | 0% | 1.5 | Sat Feb 27, 2027 | Sat Mar 6, 2027 |
+| `elec_panel` | Electrical - panel & circuits landed | Electrical crew | 0% | 1.5 | Sat Feb 13, 2027 | Sat Feb 27, 2027 |
 | `insp_rough` | **Rough inspection** | inspection |  |  | Tue Mar 9, 2027 | Tue Mar 9, 2027 |
 | `insl_all` | **Insulation** | Owner | 29% | 5 | Sat Mar 13, 2027 | Sat Mar 27, 2027 |
 | `insp_insl` | **Insulation inspection (energy rater)** | inspection |  |  | Mon Apr 5, 2027 | Mon Apr 5, 2027 |
