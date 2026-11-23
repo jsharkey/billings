@@ -173,8 +173,7 @@ templates:
     scaled: true
     items:
       boxes_low: 0.1
-      boxes_high: 0.05
-      ceiling_boxes_cans: 0.1
+      boxes_high_cans: 0.15     # switch boxes, ceiling boxes, recessed cans
       homeruns: 0.1
       switch_legs: 0.05
       made_up_grounds: 0.1
@@ -487,7 +486,7 @@ status:
     elec_rough: {boxes_low: done, homeruns: 0.5, made_up_grounds: 0.5}
     elec_trim: 0.5
   main_dining:
-    elec_rough: {boxes_low: done, boxes_high: done, ceiling_boxes_cans: done, homeruns: 0.5, made_up_grounds: 0.5}
+    elec_rough: {boxes_low: done, boxes_high_cans: done, homeruns: 0.5, made_up_grounds: 0.5}
     elec_trim: 0.5
   main_living:
     fram: {walls: 0.5, headers: done, blocking: done}

@@ -544,6 +544,9 @@ button.s { cursor: pointer; }
 button.s:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .s.done { background: var(--done); } .s.part { background: var(--part); } .s.todo { background: var(--todo); }
 .s.chg::after { content: ""; position: absolute; inset: -3px; border: 2px solid var(--accent); border-radius: 6px; }
+.ramp { display: inline-block; width: 140px; height: 12px; border-radius: 3px;
+  background: linear-gradient(90deg, hsl(0 70% 60%), hsl(30 70% 60%), hsl(120 55% 55%)); }
+.s.crit-key { background: transparent; border: 3px solid #1d1d1b; }
 .legend { color: var(--muted); font-size: .85rem; display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
 .toolbar { margin: 8px 0 4px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 .toolbar .sp { flex: 1; }
@@ -564,6 +567,10 @@ pre.yaml { background: var(--code); border: 1px solid var(--line); border-radius
 <div class="tiles">__TILES__</div>
 
 <h2>Gantt</h2>
+<div class="legend">
+  <span>Bar color = % done</span><span class="ramp"></span><span>0% &rarr; 100%</span>
+  <span><i class="s crit-key"></i> heavy outline = critical path</span>
+</div>
 <div class="gantt"><pre class="mermaid">
 __GANTT__
 </pre></div>
@@ -592,7 +599,7 @@ __GANTT__
 <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
 <script>
 const DATA = __DATA__;
-mermaid.initialize({ startOnLoad: true, theme: "default",
+mermaid.initialize({ startOnLoad: false, theme: "default",
   gantt: { useWidth: Math.max(1200, DATA.tasks.length * 22), barHeight: 18, fontSize: 12 } });
 
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -611,6 +618,26 @@ let edits = {};
 try { edits = JSON.parse(localStorage.getItem(STORE) || "{}") || {}; } catch (e) { edits = {}; }
 const save = () => { try { localStorage.setItem(STORE, JSON.stringify(edits)); } catch (e) {} };
 const val = k => (k in edits ? edits[k] : orig[k]);
+
+// Bar color by % done: red (0%) -> orange (50%) -> green (100%).
+function progressColor(p) {
+  const hue = p < 0.5 ? 60 * p : 30 + 180 * (p - 0.5);
+  const sat = p < 0.5 ? 70 : 70 - 30 * (p - 0.5);
+  return `hsl(${hue.toFixed(0)} ${sat.toFixed(0)}% ${p < 1 ? 60 : 55}%)`;
+}
+function colorGantt() {
+  const svg = document.querySelector(".gantt svg"); if (!svg) return;
+  DATA.tasks.forEach(t => {
+    if (t.kind !== "work" || t.done) return;
+    const rect = svg.querySelector(`rect[id="${CSS.escape(t.id)}"]`); if (!rect) return;
+    const pct = taskStats(t).pct;
+    rect.style.fill = progressColor(pct);
+    rect.style.stroke = t.crit ? "#1d1d1b" : "rgba(0,0,0,.25)";
+    rect.style.strokeWidth = t.crit ? "2.5px" : "1px";
+    const label = svg.querySelector(`text[id="${CSS.escape(t.id)}-text"]`);
+    if (label && label.classList.contains("taskText")) label.style.fill = "#1d1d1b";
+  });
+}
 
 function cycle(v) { return v === 0 ? 1 : v === 1 ? 0.5 : 0; }
 
@@ -687,7 +714,7 @@ document.getElementById("tasks").addEventListener("click", e => {
     const t = DATA.tasks.find(t => t.id === d.dataset.id);
     if (t.items.some(i => key(i.area, t.template, i.item) === k)) d.querySelector("summary").innerHTML = summaryHtml(t);
   });
-  drawYaml();
+  drawYaml(); colorGantt();
 });
 document.getElementById("expand").onclick = () => document.querySelectorAll("#tasks details").forEach(d => d.open = true);
 document.getElementById("collapse").onclick = () => document.querySelectorAll("#tasks details").forEach(d => d.open = false);
@@ -741,7 +768,7 @@ function drawYaml() {
     : "No edits yet: this matches schedule.yaml. Click squares above to change status.";
   document.getElementById("reset").disabled = !n;
 }
-document.getElementById("reset").onclick = () => { edits = {}; save(); drawTasks(); drawYaml(); };
+document.getElementById("reset").onclick = () => { edits = {}; save(); drawTasks(); drawYaml(); colorGantt(); };
 document.getElementById("copy").onclick = async e => {
   const text = document.getElementById("yaml").textContent, b = e.currentTarget;
   try { await navigator.clipboard.writeText(text); }
@@ -753,6 +780,7 @@ document.getElementById("copy").onclick = async e => {
 };
 
 drawFilter(); drawTasks(); drawYaml();
+mermaid.run({ querySelector: ".gantt .mermaid" }).then(colorGantt);
 </script>
 </body>
 </html>
