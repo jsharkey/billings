@@ -20,6 +20,13 @@ an edit made in GitHub's web editor).
 
 ## Updating progress
 
+**From the live page:** open a task, click squares to set each item (to do → done → ½ → to do),
+then copy the **Status YAML** block at the bottom and paste it over the `status:` section at
+the end of `schedule.yaml`. Set `project.as_of` and commit. Unsent edits are kept in your
+browser until you reset them or the committed status changes.
+
+**By hand:**
+
 1. Set `project.as_of` to today.
 2. Update `status:` for the areas you worked on: `done`, `todo`, `na`, or a fraction
    like `0.5`, either for a whole template (`elec_rough: 0.5`) or per item

@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import hashlib
 import html
 import json
 import sys
@@ -56,6 +57,7 @@ class Task:
     template: str | None = None
     areas: list[str] = field(default_factory=list)
     items: list[Item] = field(default_factory=list)
+    na_items: list[tuple[str, str, str]] = field(default_factory=list)  # (area, template, item)
     effort: float = 0.0    # total effort
     progress: float = 0.0  # 0..1 overall
     lag: int = 0
@@ -151,6 +153,7 @@ def build_tasks(cfg: dict) -> dict[str, Task]:
                             eff = float(spec)
                         prog = parse_state(st.get(iname) if isinstance(st, dict) else st)
                         if prog < 0:   # na
+                            t.na_items.append((a, tname, iname))
                             continue
                         t.items.append(Item(a, tname, iname, eff * scale, prog))
                 t.effort = sum(i.effort for i in t.items)
@@ -495,17 +498,17 @@ HTML_TEMPLATE = """<!doctype html>
 <style>
 :root {
   --bg: #fbfaf8; --fg: #1d1d1b; --muted: #6b6a66; --line: #e3e1dc; --card: #ffffff;
-  --done: #3f8f5a; --part: #c9902c; --todo: #d9d6cf; --accent: #3a5fa8;
+  --done: #3f8f5a; --part: #c9902c; --todo: #d9d6cf; --accent: #3a5fa8; --code: #f3f1ec;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #161615; --fg: #ecebe7; --muted: #9c9a94; --line: #2e2d2a; --card: #1f1e1c;
-    --done: #5fb27a; --part: #e0aa48; --todo: #3a3935; --accent: #7d9fe0;
+    --done: #5fb27a; --part: #e0aa48; --todo: #3a3935; --accent: #7d9fe0; --code: #262522;
   }
 }
 :root[data-theme="dark"] {
   --bg: #161615; --fg: #ecebe7; --muted: #9c9a94; --line: #2e2d2a; --card: #1f1e1c;
-  --done: #5fb27a; --part: #e0aa48; --todo: #3a3935; --accent: #7d9fe0;
+  --done: #5fb27a; --part: #e0aa48; --todo: #3a3935; --accent: #7d9fe0; --code: #262522;
 }
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--bg); color: var(--fg);
@@ -529,18 +532,29 @@ summary .meta { color: var(--muted); font-size: .85rem; font-variant-numeric: ta
 .bar { width: 120px; height: 8px; background: var(--todo); border-radius: 4px; overflow: hidden; flex: none; }
 .bar > i { display: block; height: 100%; background: var(--done); }
 .crit { color: #c0392b; font-size: .75rem; font-weight: 700; letter-spacing: .04em; }
+.edited { color: var(--accent); font-size: .75rem; font-weight: 700; letter-spacing: .04em; }
 .grid { overflow-x: auto; padding-bottom: 12px; }
 table { border-collapse: collapse; font-size: .85rem; }
 th, td { padding: 4px 8px; border-bottom: 1px solid var(--line); text-align: left; white-space: nowrap; }
 th { color: var(--muted); font-weight: 500; }
 td.c { text-align: center; }
-.s { display: inline-block; width: 14px; height: 14px; border-radius: 3px; vertical-align: middle; }
+.s { display: inline-block; width: 18px; height: 18px; border-radius: 4px; vertical-align: middle;
+  border: 0; padding: 0; position: relative; }
+button.s { cursor: pointer; }
+button.s:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .s.done { background: var(--done); } .s.part { background: var(--part); } .s.todo { background: var(--todo); }
-.legend { color: var(--muted); font-size: .85rem; display: flex; gap: 16px; flex-wrap: wrap; }
-.filter { margin: 8px 0 4px; display: flex; gap: 8px; flex-wrap: wrap; }
-.filter button { background: var(--card); color: var(--fg); border: 1px solid var(--line);
+.s.chg::after { content: ""; position: absolute; inset: -3px; border: 2px solid var(--accent); border-radius: 6px; }
+.legend { color: var(--muted); font-size: .85rem; display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+.toolbar { margin: 8px 0 4px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.toolbar .sp { flex: 1; }
+.pill { background: var(--card); color: var(--fg); border: 1px solid var(--line);
   border-radius: 999px; padding: 4px 12px; cursor: pointer; font: inherit; font-size: .85rem; }
-.filter button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+.pill[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+.pill:disabled { opacity: .5; cursor: default; }
+.yaml-head { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.yaml-head p { margin: 0; color: var(--muted); font-size: .9rem; flex: 1 1 320px; }
+pre.yaml { background: var(--code); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px;
+  overflow-x: auto; font: 13px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace; margin: 10px 0 0; }
 </style>
 </head>
 <body>
@@ -555,9 +569,25 @@ __GANTT__
 </pre></div>
 
 <h2>Progress by task</h2>
-<div class="legend"><span><i class="s done"></i> done</span><span><i class="s part"></i> partial</span><span><i class="s todo"></i> to do</span></div>
-<div class="filter" id="filter"></div>
+<div class="legend">
+  <span><i class="s done"></i> done</span><span><i class="s part"></i> partial</span><span><i class="s todo"></i> to do</span>
+  <span>Click a square to change it: to do &rarr; done &rarr; &frac12; &rarr; to do. Dates update after you commit.</span>
+</div>
+<div class="toolbar">
+  <span id="filter" class="toolbar"></span>
+  <span class="sp"></span>
+  <button class="pill" id="expand">Expand all</button>
+  <button class="pill" id="collapse">Collapse all</button>
+</div>
 <div id="tasks"></div>
+
+<h2 id="status-yaml">Status YAML</h2>
+<div class="yaml-head">
+  <p id="yaml-note"></p>
+  <button class="pill" id="reset">Reset edits</button>
+  <button class="pill" id="copy">Copy</button>
+</div>
+<pre class="yaml" id="yaml"></pre>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
 <script>
@@ -566,42 +596,163 @@ mermaid.initialize({ startOnLoad: true, theme: "default",
   gantt: { useWidth: Math.max(1200, DATA.tasks.length * 22), barHeight: 18, fontSize: 12 } });
 
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const key = (a, t, i) => a + "|" + t + "|" + i;
+
+// Original per-item state from schedule.yaml: number 0..1, or "na".
+const orig = {};
+DATA.tasks.forEach(t => {
+  t.items.forEach(i => orig[key(i.area, t.template, i.item)] = i.progress);
+  t.na.forEach(([a, i]) => orig[key(a, t.template, i)] = "na");
+});
+
+// Unsent edits survive a reload, but only for this exact status.
+const STORE = "status-edits:" + DATA.version;
+let edits = {};
+try { edits = JSON.parse(localStorage.getItem(STORE) || "{}") || {}; } catch (e) { edits = {}; }
+const save = () => { try { localStorage.setItem(STORE, JSON.stringify(edits)); } catch (e) {} };
+const val = k => (k in edits ? edits[k] : orig[k]);
+
+function cycle(v) { return v === 0 ? 1 : v === 1 ? 0.5 : 0; }
+
+function taskStats(t) {
+  let eff = 0, doneEff = 0, changed = 0;
+  t.items.forEach(i => {
+    const k = key(i.area, t.template, i.item), p = val(k);
+    eff += i.effort; doneEff += i.effort * p;
+    if (k in edits) changed++;
+  });
+  if (!t.items.length) return { pct: t.progress, rem: t.rem, changed: 0 };
+  return { pct: eff ? doneEff / eff : 1, rem: (eff - doneEff).toFixed(2).replace(/\\.?0+$/, ""), changed };
+}
+
+// ---- crew filter -----------------------------------------------------------
 const crews = ["All", ...new Set(DATA.tasks.filter(t => t.kind === "work").map(t => t.crew))];
 let sel = "All";
 function drawFilter() {
   document.getElementById("filter").innerHTML = crews.map(c =>
-    `<button aria-pressed="${c === sel}" data-c="${esc(c)}">${esc(c)}</button>`).join("");
+    `<button class="pill" aria-pressed="${c === sel}" data-c="${esc(c)}">${esc(c)}</button>`).join("");
 }
 document.getElementById("filter").addEventListener("click", e => {
   const b = e.target.closest("button"); if (!b) return;
   sel = b.dataset.c; drawFilter(); drawTasks();
 });
-function cell(p) {
-  if (p === undefined) return "<td></td>";
+
+// ---- task list -------------------------------------------------------------
+function cell(t, area, item) {
+  const k = key(area, t.template, item);
+  if (!(k in orig) || orig[k] === "na") return "<td></td>";
+  const p = val(k);
   const cls = p >= 1 ? "done" : p > 0 ? "part" : "todo";
   const tip = p >= 1 ? "done" : p > 0 ? Math.round(p * 100) + "%" : "to do";
-  return `<td class="c" title="${tip}"><i class="s ${cls}"></i></td>`;
+  const label = `${DATA.areas[area]} ${item.replaceAll("_", " ")}: ${tip}`;
+  return `<td class="c"><button class="s ${cls}${k in edits ? " chg" : ""}" data-k="${esc(k)}" ` +
+         `title="${esc(tip)}" aria-label="${esc(label)}"></button></td>`;
+}
+function summaryHtml(t) {
+  const st = taskStats(t);
+  return `<span class="nm">${esc(t.name)}</span>` +
+    (st.changed ? `<span class="edited">EDITED</span>` : "") +
+    (t.crit ? `<span class="crit">CRITICAL</span>` : "") +
+    `<span class="bar"><i style="width:${Math.round(st.pct * 100)}%"></i></span>` +
+    `<span class="meta">${esc(t.crew)} · ${Math.round(st.pct * 100)}% · ${st.rem} days left · ` +
+    `${t.done ? "done" : esc(t.start) + " → " + esc(t.finish)}</span>`;
 }
 function drawTasks() {
-  const html = DATA.tasks.filter(t => t.kind === "work" && (sel === "All" || t.crew === sel)).map(t => {
-    let grid = "";
-    if (t.items.length) {
-      const cols = [...new Set(t.items.map(i => i.item))];
-      const rows = [...new Set(t.items.map(i => i.area))];
-      const m = {}; t.items.forEach(i => m[i.area + "|" + i.item] = i.progress);
-      grid = `<div class="grid"><table><tr><th>Area</th>${cols.map(c => `<th>${esc(c.replaceAll("_", " "))}</th>`).join("")}</tr>` +
-        rows.map(r => `<tr><td>${esc(DATA.areas[r])}</td>${cols.map(c => cell(m[r + "|" + c])).join("")}</tr>`).join("") +
-        `</table></div>`;
-    }
-    return `<details><summary><span class="nm">${esc(t.name)}</span>` +
-      (t.crit ? `<span class="crit">CRITICAL</span>` : "") +
-      `<span class="bar"><i style="width:${Math.round(t.progress * 100)}%"></i></span>` +
-      `<span class="meta">${esc(t.crew)} · ${Math.round(t.progress * 100)}% · ${t.rem} days left · ${t.done ? "done" : esc(t.start) + " → " + esc(t.finish)}</span>` +
-      `</summary>${grid}</details>`;
-  }).join("");
-  document.getElementById("tasks").innerHTML = html;
+  const open = new Set([...document.querySelectorAll("#tasks details[open]")].map(d => d.dataset.id));
+  document.getElementById("tasks").innerHTML = DATA.tasks
+    .filter(t => t.kind === "work" && (sel === "All" || t.crew === sel)).map(t => {
+      let grid = "";
+      if (t.items.length) {
+        const cols = [...new Set(t.items.map(i => i.item))];
+        const rows = [...new Set(t.items.map(i => i.area))];
+        grid = `<div class="grid"><table><tr><th>Area</th>${cols.map(c => `<th>${esc(c.replaceAll("_", " "))}</th>`).join("")}</tr>` +
+          rows.map(r => `<tr><td>${esc(DATA.areas[r])}</td>${cols.map(c => cell(t, r, c)).join("")}</tr>`).join("") +
+          `</table></div>`;
+      }
+      return `<details data-id="${t.id}"${open.has(t.id) ? " open" : ""}><summary>${summaryHtml(t)}</summary>${grid}</details>`;
+    }).join("");
 }
-drawFilter(); drawTasks();
+document.getElementById("tasks").addEventListener("click", e => {
+  const b = e.target.closest("button.s"); if (!b) return;
+  const k = b.dataset.k, next = cycle(val(k));
+  if (next === orig[k]) delete edits[k]; else edits[k] = next;
+  save();
+  // update every square for this key (an area/item can appear once per template)
+  document.querySelectorAll(`button.s[data-k="${CSS.escape(k)}"]`).forEach(x => {
+    const td = x.parentElement; const t = DATA.tasks.find(t => t.id === td.closest("details").dataset.id);
+    const [a, , i] = k.split("|");
+    td.outerHTML = cell(t, a, i);
+  });
+  document.querySelectorAll("#tasks details").forEach(d => {
+    const t = DATA.tasks.find(t => t.id === d.dataset.id);
+    if (t.items.some(i => key(i.area, t.template, i.item) === k)) d.querySelector("summary").innerHTML = summaryHtml(t);
+  });
+  drawYaml();
+});
+document.getElementById("expand").onclick = () => document.querySelectorAll("#tasks details").forEach(d => d.open = true);
+document.getElementById("collapse").onclick = () => document.querySelectorAll("#tasks details").forEach(d => d.open = false);
+
+// ---- status YAML -----------------------------------------------------------
+function fmt(v) {
+  if (v === "na") return "na";
+  if (v >= 1) return "done";
+  if (v <= 0) return "todo";
+  return String(Math.round(v * 1000) / 1000);
+}
+function rawYaml(v) {
+  if (v && typeof v === "object") return "{" + Object.entries(v).map(([k, x]) => `${k}: ${x}`).join(", ") + "}";
+  return String(v);
+}
+function buildYaml() {
+  // group current values by area -> template -> [item, value] (template item order)
+  const byArea = {};
+  DATA.areaOrder.forEach(a => byArea[a] = {});
+  DATA.templateOrder.forEach(tpl => DATA.templateItems[tpl].forEach(item => {
+    DATA.areaOrder.forEach(a => {
+      const k = key(a, tpl, item);
+      if (!(k in orig)) return;
+      (byArea[a][tpl] = byArea[a][tpl] || []).push([item, val(k)]);
+    });
+  }));
+  const lines = ["status:"];
+  DATA.areaOrder.forEach(a => {
+    const out = [];
+    DATA.templateOrder.forEach(tpl => {
+      const extra = (DATA.extraStatus[a] || {})[tpl];
+      if (extra !== undefined) { out.push(`    ${tpl}: ${rawYaml(extra)}`); return; }
+      const items = byArea[a][tpl]; if (!items) return;
+      const vals = items.map(([, v]) => fmt(v));
+      if (vals.every(v => v === vals[0])) {
+        if (vals[0] !== "todo") out.push(`    ${tpl}: ${vals[0]}`);
+      } else {
+        const parts = items.filter(([, v]) => fmt(v) !== "todo").map(([i, v]) => `${i}: ${fmt(v)}`);
+        out.push(`    ${tpl}: {${parts.join(", ")}}`);
+      }
+    });
+    if (out.length) lines.push(`  ${a}:`, ...out);
+  });
+  return lines.join("\\n") + "\\n";
+}
+function drawYaml() {
+  const n = Object.keys(edits).length;
+  document.getElementById("yaml").textContent = buildYaml();
+  document.getElementById("yaml-note").textContent = n
+    ? `${n} item${n === 1 ? "" : "s"} changed. Paste this over the status: section at the end of schedule.yaml, set project.as_of to today, and commit.`
+    : "No edits yet: this matches schedule.yaml. Click squares above to change status.";
+  document.getElementById("reset").disabled = !n;
+}
+document.getElementById("reset").onclick = () => { edits = {}; save(); drawTasks(); drawYaml(); };
+document.getElementById("copy").onclick = async e => {
+  const text = document.getElementById("yaml").textContent, b = e.currentTarget;
+  try { await navigator.clipboard.writeText(text); }
+  catch (err) {
+    const r = document.createRange(); r.selectNodeContents(document.getElementById("yaml"));
+    const s = getSelection(); s.removeAllRanges(); s.addRange(r); document.execCommand("copy");
+  }
+  b.textContent = "Copied"; setTimeout(() => b.textContent = "Copy", 1500);
+};
+
+drawFilter(); drawTasks(); drawYaml();
 </script>
 </body>
 </html>
@@ -611,13 +762,30 @@ drawFilter(); drawTasks();
 def render_html(cfg: dict, tasks: dict[str, Task], gantt: str) -> str:
     proj = cfg["project"]
     rows = {r["id"]: r for r in task_rows(cfg, tasks)}
+    covered = set()
+    for t in tasks.values():
+        covered.update((i.area, i.template) for i in t.items)
+        covered.update((a, tpl) for a, tpl, _ in t.na_items)
+    extra = {}   # status entries no task shows: passed through unchanged
+    for a, tmap in (cfg.get("status") or {}).items():
+        for tpl, st in (tmap or {}).items():
+            if (a, tpl) not in covered:
+                extra.setdefault(a, {})[tpl] = st
+    status_json = json.dumps(cfg.get("status") or {}, sort_keys=True, default=str)
     data = {
+        "version": hashlib.sha1(status_json.encode()).hexdigest()[:12],
         "areas": {a: v["name"] for a, v in cfg["areas"].items()},
+        "areaOrder": list(cfg["areas"]),
+        "templateOrder": list(cfg["templates"]),
+        "templateItems": {k: list(v["items"]) for k, v in cfg["templates"].items()},
+        "extraStatus": extra,
         "tasks": [
-            dict(id=t.id, name=t.name, kind=t.kind, crew=rows[t.id]["crew"],
+            dict(id=t.id, name=t.name, kind=t.kind, crew=rows[t.id]["crew"], template=t.template,
                  progress=round(t.progress, 3), rem=rows[t.id]["rem"], done=t.done,
                  start=rows[t.id]["start"], finish=rows[t.id]["finish"], crit=t.critical,
-                 items=[dict(area=i.area, item=i.item, progress=i.progress) for i in t.items])
+                 items=[dict(area=i.area, item=i.item, effort=round(i.effort, 4), progress=i.progress)
+                        for i in t.items],
+                 na=[[a, i] for a, _, i in t.na_items])
             for t in tasks.values()
         ],
     }

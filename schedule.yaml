@@ -282,7 +282,15 @@ tasks:
   - {id: plum_bsmt_kitchenette, name: Plumbing rough - kitchenette, section: Plumbing, crew: owner, template: plum_rough, areas: [bsmt_kitchenette], after: [plum_house]}
 
   # --- HVAC rough (owner) -------------------------------------------------
-  - {id: hvac_house,        name: HVAC - trunk & equipment,     section: HVAC, crew: owner, template: hvac_main, areas: [house], after: [demo_all]}
+  # HVAC is clustered: none of it starts until all framing and plumbing rough is done.
+  - id: hvac_house
+    name: HVAC - trunk & equipment
+    section: HVAC
+    crew: owner
+    template: hvac_main
+    areas: [house]
+    after: [fram_main_s_bath, fram_main_laundry, fram_main_living, fram_bsmt_west,
+            plum_house, plum_main_kitchen, plum_main_n_bath, plum_main_s_bath, plum_main_laundry, plum_bsmt_baths, plum_bsmt_kitchenette]
   - id: hvac_main
     name: HVAC rough - main floor
     section: HVAC
