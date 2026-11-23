@@ -6,11 +6,11 @@ Status as of **Sat Nov 21, 2026**. Dates after that are projections.
 
 | Milestone | Projected |
 |---|---|
-| Rough inspection | Thu Apr 1, 2027 |
-| Insulation inspection (energy rater) | Mon Apr 26, 2027 |
-| Wallboard inspection | Wed May 5, 2027 |
-| Final inspection | Tue Sep 21, 2027 |
-| Move-in | Sat Oct 2, 2027 |
+| Rough inspection | Tue Mar 23, 2027 |
+| Insulation inspection (energy rater) | Mon Apr 19, 2027 |
+| Wallboard inspection | Mon May 3, 2027 |
+| Final inspection | Tue Oct 12, 2027 |
+| Move-in | Sat Oct 30, 2027 |
 
 Interactive view with room-by-room checklists: `docs/index.html`.
 
@@ -22,70 +22,75 @@ gantt
     tickInterval 1month
     todayMarker off
     section Framing
-    Framing - basement west :crit, fram_bsmt_west, 2026-11-22 08:00, 2026-11-29 11:48
-    Demolition - laundry & pantry (48%) :active, crit, demo_main_laundry, 2026-12-05 15:48, 2026-12-06 13:00
-    Framing - main ensuite bath (43%) :active, crit, fram_main_s_bath, 2026-12-06 13:00, 2026-12-12 11:24
-    Framing - laundry & pantry :crit, fram_main_laundry, 2026-12-12 11:24, 2026-12-19 09:24
-    Framing - living room (57%) :active, crit, fram_main_living, 2027-01-17 10:24, 2027-01-23 09:36
+    Framing - basement west :crit, fram_bsmt_west, 2026-11-22 08:00, 2026-12-06 08:24
+    Framing - main ensuite bath (43%) :active, crit, fram_main_s_bath, 2026-12-12 12:24, 2026-12-13 10:48
+    Demolition - laundry & pantry (48%) :active, crit, demo_main_laundry, 2026-12-13 10:48, 2026-12-13 16:00
+    Framing - laundry & pantry :crit, fram_main_laundry, 2026-12-27 10:00, 2027-01-02 16:00
+    Framing - living room (57%) :active, crit, fram_main_living, 2027-01-17 13:00, 2027-01-23 12:12
     section Plumbing
-    Plumbing - trunks & water heater (50%) :active, crit, plum_house, 2026-11-29 11:48, 2026-12-05 15:48
-    Plumbing rough - main ensuite bath :crit, plum_main_s_bath, 2026-12-19 09:24, 2026-12-22 15:24
-    Plumbing rough - basement baths (53%) :active, crit, plum_bsmt_baths, 2026-12-22 15:24, 2026-12-27 11:24
-    Plumbing rough - laundry :crit, plum_main_laundry, 2026-12-27 11:24, 2027-01-09 09:24
-    Plumbing rough - kitchenette (27%) :active, crit, plum_bsmt_kitchenette, 2027-01-09 09:24, 2027-01-16 09:24
-    Plumbing rough - main hall bath (65%) :active, crit, plum_main_n_bath, 2027-01-16 09:24, 2027-01-17 10:24
+    Plumbing - trunks & water heater (50%) :active, crit, plum_house, 2026-12-06 08:24, 2026-12-12 12:24
+    Plumbing rough - main ensuite bath :crit, plum_main_s_bath, 2026-12-19 08:00, 2026-12-22 14:00
+    Plumbing rough - basement baths (53%) :active, crit, plum_bsmt_baths, 2026-12-22 14:00, 2026-12-27 10:00
+    Plumbing rough - kitchenette (27%) :active, crit, plum_bsmt_kitchenette, 2027-01-03 08:00, 2027-01-09 16:00
+    Plumbing rough - laundry :crit, plum_main_laundry, 2027-01-10 08:00, 2027-01-16 12:00
+    Plumbing rough - main hall bath (65%) :active, crit, plum_main_n_bath, 2027-01-16 12:00, 2027-01-17 13:00
     section HVAC
-    HVAC - trunk & equipment :crit, hvac_house, 2027-01-23 09:36, 2027-01-30 09:36
-    HVAC rough - main floor (7%) :active, crit, hvac_main, 2027-01-30 09:36, 2027-02-21 09:36
-    HVAC rough - basement east :crit, hvac_bsmt_east, 2027-02-21 09:36, 2027-03-13 09:36
-    HVAC rough - basement west :crit, hvac_bsmt_west, 2027-03-13 09:36, 2027-03-20 09:36
+    HVAC - trunk & equipment :crit, hvac_house, 2027-01-23 12:12, 2027-01-30 12:12
+    HVAC rough - main floor (7%) :active, crit, hvac_main, 2027-01-30 12:12, 2027-02-21 12:12
+    HVAC rough - basement east :crit, hvac_bsmt_east, 2027-02-21 12:12, 2027-03-06 12:12
+    HVAC rough - basement west :hvac_bsmt_west, 2027-03-06 12:12, 2027-03-07 12:12
     section Electrical
-    Electrical rough - main floor (19%) :active, elec_main, 2027-02-22 08:00, 2027-02-25 12:19
-    Electrical rough - basement east (9%) :active, elec_bsmt_east, 2027-03-15 08:00, 2027-03-17 12:05
-    Electrical rough - basement west :crit, elec_bsmt_west, 2027-03-22 08:00, 2027-03-23 14:48
-    Low-voltage rough :crit, lowv_all, 2027-03-23 14:48, 2027-03-29 08:48
-    Electrical - panel & circuits landed :crit, elec_panel, 2027-03-29 08:48, 2027-03-30 12:48
+    Electrical rough - main floor (14%) :active, elec_main, 2027-02-22 08:00, 2027-03-01 08:34
+    Electrical rough - basement east (9%) :active, crit, elec_bsmt_east, 2027-03-08 08:00, 2027-03-10 12:48
+    Electrical rough - basement west :crit, elec_bsmt_west, 2027-03-10 12:48, 2027-03-12 15:12
+    Low-voltage rough :crit, lowv_all, 2027-03-12 15:12, 2027-03-18 09:12
+    Electrical - panel & circuits landed :crit, elec_panel, 2027-03-18 09:12, 2027-03-19 13:12
     section Inspections
-    Rough inspection :milestone, crit, insp_rough, 2027-04-01 12:00, 0d
-    Insulation inspection (energy rater) :milestone, crit, insp_insl, 2027-04-26 12:00, 0d
-    Wallboard inspection :milestone, crit, insp_board, 2027-05-05 12:00, 0d
-    Final inspection :milestone, crit, insp_final, 2027-09-21 12:00, 0d
+    Rough inspection :milestone, crit, insp_rough, 2027-03-23 12:00, 0d
+    Insulation inspection (energy rater) :milestone, crit, insp_insl, 2027-04-19 12:00, 0d
+    Wallboard inspection :milestone, crit, insp_board, 2027-05-03 12:00, 0d
+    Final inspection :milestone, insp_final, 2027-10-12 12:00, 0d
     section Insulation & drywall
-    Insulation (31%) :active, crit, insl_all, 2027-04-03 08:00, 2027-04-17 12:00
-    Drywall hang - basement :crit, dryw_hang_bsmt, 2027-04-27 08:00, 2027-04-30 09:46
-    Drywall hang - main floor :crit, dryw_hang_main, 2027-04-30 09:46, 2027-05-03 13:10
-    Drywall finish - basement :crit, dryw_fin_bsmt, 2027-05-06 08:00, 2027-05-13 12:10
-    Drywall finish - main floor :dryw_fin_main, 2027-05-13 12:10, 2027-05-18 09:46
+    Insulation (29%) :active, crit, insl_all, 2027-03-27 08:00, 2027-04-10 16:00
+    Drywall hang - basement :crit, dryw_hang_bsmt, 2027-04-20 08:00, 2027-04-27 08:29
+    Drywall hang - main floor :crit, dryw_hang_main, 2027-04-27 08:29, 2027-04-28 11:53
+    Drywall finish - basement :crit, dryw_fin_bsmt, 2027-05-04 08:00, 2027-05-12 09:26
+    Drywall finish - main floor :dryw_fin_main, 2027-05-12 09:26, 2027-05-14 15:02
     section Finishes
-    Paint - basement :pant_bsmt, 2027-05-14 08:00, 2027-05-20 08:02
-    Tile - basement baths :crit, tile_bsmt_baths, 2027-05-15 08:00, 2027-06-13 16:00
-    Paint - main floor :pant_main, 2027-05-20 08:02, 2027-05-25 15:22
-    Flooring - basement :flor_bsmt, 2027-05-21 08:00, 2027-05-26 08:38
-    Flooring - main floor :flor_main, 2027-05-26 08:38, 2027-05-28 16:00
-    Tile - main baths :crit, tile_main_baths, 2027-06-19 08:00, 2027-07-17 16:00
-    Countertops - install (vendor) :ctop_install, 2027-07-17 16:00, 2027-07-18 16:00
-    Doors & trim - basement :crit, trim_bsmt, 2027-07-18 08:00, 2027-08-07 12:10
-    Doors & trim - main floor :crit, trim_main, 2027-08-07 12:10, 2027-08-22 13:55
-    Stair guardrail (open to foyer) :crit, rail_stair, 2027-09-18 09:55, 2027-09-19 13:55
+    Paint - basement :pant_bsmt, 2027-05-13 08:00, 2027-05-19 12:00
+    Tile - basement baths :crit, tile_bsmt_baths, 2027-05-15 08:00, 2027-06-20 12:00
+    Paint - main floor :pant_main, 2027-05-19 12:00, 2027-05-25 11:19
+    Flooring - basement :flor_bsmt, 2027-05-20 08:00, 2027-05-25 12:10
+    Flooring - main floor :flor_main, 2027-05-26 08:00, 2027-05-28 15:22
+    Tile - main baths :crit, tile_main_baths, 2027-06-20 12:00, 2027-07-25 10:00
+    Doors & trim - basement :crit, trim_bsmt, 2027-07-25 10:00, 2027-08-15 11:26
+    Shower glass - measure :glas_showers, 2027-07-25 16:00, 2027-08-08 16:00
+    Cabinets - kitchenette & basement vanities :crit, cabs_bsmt, 2027-08-15 11:26, 2027-08-22 15:26
+    Doors & trim - main floor :crit, trim_main, 2027-08-22 15:26, 2027-09-12 09:12
+    Cabinets - laundry & main vanities :crit, cabs_main, 2027-09-12 09:12, 2027-09-19 09:12
+    Stair guardrail (open to foyer) :crit, rail_stair, 2027-09-19 09:12, 2027-09-25 13:12
+    Countertops - install (vendor) :ctop_install, 2027-09-19 16:00, 2027-09-20 16:00
+    Closet rods & shelving - main floor :crit, clos_main, 2027-10-10 10:11, 2027-10-16 14:11
+    Closet rods & shelving - basement :crit, clos_bsmt, 2027-10-16 14:11, 2027-10-17 14:11
     section Trim-out
-    Electrical trim (4%) :active, elec_trim, 2027-05-26 08:00, 2027-06-01 14:24
-    Plumbing trim :crit, plum_trim, 2027-08-22 13:55, 2027-09-05 09:55
-    HVAC trim :crit, hvac_trim, 2027-09-05 09:55, 2027-09-18 09:55
+    Electrical trim (5%) :active, elec_trim, 2027-05-26 08:00, 2027-06-01 13:46
+    Plumbing trim :crit, plum_trim, 2027-09-25 13:12, 2027-10-09 09:12
+    HVAC trim :crit, hvac_trim, 2027-10-09 09:12, 2027-10-10 10:11
     section Closeout
-    Paint touch-up :pant_touchup, 2027-08-23 08:00, 2027-08-24 16:00
-    Punch list & clean :crit, punch_clean, 2027-09-25 08:00, 2027-10-02 16:00
-    Move-in :milestone, crit, mile_movein, 2027-10-02 16:00, 0d
+    Paint touch-up :pant_touchup, 2027-09-13 08:00, 2027-09-14 16:00
+    Punch list & clean :crit, punch_clean, 2027-10-17 14:11, 2027-10-30 14:11
+    Move-in :milestone, crit, mile_movein, 2027-10-30 14:11, 0d
 ```
 
 ## Remaining work by crew
 
 | Crew | Work days remaining |
 |---|---|
-| Owner | 86.4 |
-| Electrical crew | 16.4 |
-| Drywall crew | 12.9 |
-| Paint crew | 9.9 |
-| Flooring crew | 6.0 |
+| Owner | 92.3 |
+| Electrical crew | 18.4 |
+| Drywall crew | 15.4 |
+| Paint crew | 10.4 |
+| Flooring crew | 6.4 |
 
 ## Tasks
 
@@ -94,52 +99,57 @@ Critical-path tasks (the chain that sets the move-in date) are marked **bold**.
 | ID | Task | Crew | Done | Days left | Start | Finish |
 |---|---|---|---|---|---|---|
 | `demo_all` | Demolition - all other areas | Owner | 100% | 0 |  | done |
-| `demo_main_laundry` | **Demolition - laundry & pantry** | Owner | 48% | 0.65 | Sat Dec 5, 2026 | Sun Dec 6, 2026 |
+| `demo_main_laundry` | **Demolition - laundry & pantry** | Owner | 48% | 0.65 | Sun Dec 13, 2026 | Sun Dec 13, 2026 |
 | `fram_main_beds` | Framing - main bedrooms | Owner | 100% | 0 |  | done |
 | `fram_main_n_bath` | Framing - main hall bath | Owner | 100% | 0 |  | done |
-| `fram_main_s_bath` | **Framing - main ensuite bath** | Owner | 43% | 0.8 | Sun Dec 6, 2026 | Sat Dec 12, 2026 |
+| `fram_main_s_bath` | **Framing - main ensuite bath** | Owner | 43% | 0.8 | Sat Dec 12, 2026 | Sun Dec 13, 2026 |
 | `fram_main_kitchen` | Framing - kitchen | Owner | 100% | 0 |  | done |
-| `fram_main_laundry` | **Framing - laundry & pantry** | Owner | 0% | 1.75 | Sat Dec 12, 2026 | Sat Dec 19, 2026 |
+| `fram_main_laundry` | **Framing - laundry & pantry** | Owner | 0% | 1.75 | Sun Dec 27, 2026 | Sat Jan 2, 2027 |
 | `fram_main_living` | **Framing - living room** | Owner | 57% | 0.9 | Sun Jan 17, 2027 | Sat Jan 23, 2027 |
-| `fram_bsmt_west` | **Framing - basement west** | Owner | 0% | 6.48 | Sun Nov 22, 2026 | Sun Nov 29, 2026 |
-| `plum_house` | **Plumbing - trunks & water heater** | Owner | 50% | 1.5 | Sun Nov 29, 2026 | Sat Dec 5, 2026 |
+| `fram_bsmt_west` | **Framing - basement west** | Owner | 0% | 8.05 | Sun Nov 22, 2026 | Sun Dec 6, 2026 |
+| `plum_house` | **Plumbing - trunks & water heater** | Owner | 50% | 1.5 | Sun Dec 6, 2026 | Sat Dec 12, 2026 |
 | `plum_main_kitchen` | Plumbing rough - kitchen | Owner | 100% | 0 |  | done |
 | `plum_main_n_bath` | **Plumbing rough - main hall bath** | Owner | 65% | 1.12 | Sat Jan 16, 2027 | Sun Jan 17, 2027 |
 | `plum_main_s_bath` | **Plumbing rough - main ensuite bath** | Owner | 0% | 3.75 | Sat Dec 19, 2026 | Tue Dec 22, 2026 |
-| `plum_main_laundry` | **Plumbing rough - laundry** | Owner | 0% | 2.75 | Sun Dec 27, 2026 | Sat Jan 9, 2027 |
+| `plum_main_laundry` | **Plumbing rough - laundry** | Owner | 0% | 1.5 | Sun Jan 10, 2027 | Sat Jan 16, 2027 |
 | `plum_bsmt_baths` | **Plumbing rough - basement baths** | Owner | 53% | 3.5 | Tue Dec 22, 2026 | Sun Dec 27, 2026 |
-| `plum_bsmt_kitchenette` | **Plumbing rough - kitchenette** | Owner | 27% | 2 | Sat Jan 9, 2027 | Sat Jan 16, 2027 |
+| `plum_bsmt_kitchenette` | **Plumbing rough - kitchenette** | Owner | 27% | 2 | Sun Jan 3, 2027 | Sat Jan 9, 2027 |
 | `hvac_house` | **HVAC - trunk & equipment** | Owner | 0% | 2 | Sat Jan 23, 2027 | Sat Jan 30, 2027 |
 | `hvac_main` | **HVAC rough - main floor** | Owner | 7% | 7 | Sat Jan 30, 2027 | Sun Feb 21, 2027 |
-| `hvac_bsmt_east` | **HVAC rough - basement east** | Owner | 0% | 5 | Sun Feb 21, 2027 | Sat Mar 13, 2027 |
-| `hvac_bsmt_west` | **HVAC rough - basement west** | Owner | 0% | 2 | Sat Mar 13, 2027 | Sat Mar 20, 2027 |
-| `lowv_all` | **Low-voltage rough** | Electrical crew | 0% | 3.25 | Tue Mar 23, 2027 | Mon Mar 29, 2027 |
-| `elec_main` | Electrical rough - main floor | Electrical crew | 19% | 3.54 | Mon Feb 22, 2027 | Thu Feb 25, 2027 |
-| `elec_bsmt_east` | Electrical rough - basement east | Electrical crew | 9% | 2.51 | Mon Mar 15, 2027 | Wed Mar 17, 2027 |
-| `elec_bsmt_west` | **Electrical rough - basement west** | Electrical crew | 0% | 1.85 | Mon Mar 22, 2027 | Tue Mar 23, 2027 |
-| `elec_panel` | **Electrical - panel & circuits landed** | Electrical crew | 0% | 1.5 | Mon Mar 29, 2027 | Tue Mar 30, 2027 |
-| `insp_rough` | **Rough inspection** | inspection |  |  | Thu Apr 1, 2027 | Thu Apr 1, 2027 |
-| `insl_all` | **Insulation** | Owner | 31% | 4.5 | Sat Apr 3, 2027 | Sat Apr 17, 2027 |
-| `insp_insl` | **Insulation inspection (energy rater)** | inspection |  |  | Mon Apr 26, 2027 | Mon Apr 26, 2027 |
-| `dryw_hang_main` | **Drywall hang - main floor** | Drywall crew | 0% | 1.43 | Fri Apr 30, 2027 | Mon May 3, 2027 |
-| `dryw_hang_bsmt` | **Drywall hang - basement** | Drywall crew | 0% | 3.22 | Tue Apr 27, 2027 | Fri Apr 30, 2027 |
-| `insp_board` | **Wallboard inspection** | inspection |  |  | Wed May 5, 2027 | Wed May 5, 2027 |
-| `dryw_fin_main` | Drywall finish - main floor | Drywall crew | 0% | 2.7 | Thu May 13, 2027 | Tue May 18, 2027 |
-| `dryw_fin_bsmt` | **Drywall finish - basement** | Drywall crew | 0% | 5.52 | Thu May 6, 2027 | Thu May 13, 2027 |
-| `pant_main` | Paint - main floor | Paint crew | 0% | 3.92 | Thu May 20, 2027 | Tue May 25, 2027 |
-| `pant_bsmt` | Paint - basement | Paint crew | 0% | 4 | Fri May 14, 2027 | Thu May 20, 2027 |
-| `tile_main_baths` | **Tile - main baths** | Owner | 0% | 9 | Sat Jun 19, 2027 | Sat Jul 17, 2027 |
-| `tile_bsmt_baths` | **Tile - basement baths** | Owner | 0% | 10 | Sat May 15, 2027 | Sun Jun 13, 2027 |
-| `ctop_install` | Countertops - install (vendor) | wait |  |  | Sat Jul 17, 2027 | Sun Jul 18, 2027 |
+| `hvac_bsmt_east` | **HVAC rough - basement east** | Owner | 0% | 3 | Sun Feb 21, 2027 | Sat Mar 6, 2027 |
+| `hvac_bsmt_west` | HVAC rough - basement west | Owner | 0% | 1 | Sat Mar 6, 2027 | Sun Mar 7, 2027 |
+| `lowv_all` | **Low-voltage rough** | Electrical crew | 0% | 3.25 | Fri Mar 12, 2027 | Thu Mar 18, 2027 |
+| `elec_main` | Electrical rough - main floor | Electrical crew | 14% | 5.07 | Mon Feb 22, 2027 | Mon Mar 1, 2027 |
+| `elec_bsmt_east` | **Electrical rough - basement east** | Electrical crew | 9% | 2.6 | Mon Mar 8, 2027 | Wed Mar 10, 2027 |
+| `elec_bsmt_west` | **Electrical rough - basement west** | Electrical crew | 0% | 2.3 | Wed Mar 10, 2027 | Fri Mar 12, 2027 |
+| `elec_panel` | **Electrical - panel & circuits landed** | Electrical crew | 0% | 1.5 | Thu Mar 18, 2027 | Fri Mar 19, 2027 |
+| `insp_rough` | **Rough inspection** | inspection |  |  | Tue Mar 23, 2027 | Tue Mar 23, 2027 |
+| `insl_all` | **Insulation** | Owner | 29% | 5 | Sat Mar 27, 2027 | Sat Apr 10, 2027 |
+| `insp_insl` | **Insulation inspection (energy rater)** | inspection |  |  | Mon Apr 19, 2027 | Mon Apr 19, 2027 |
+| `dryw_hang_main` | **Drywall hang - main floor** | Drywall crew | 0% | 1.43 | Tue Apr 27, 2027 | Wed Apr 28, 2027 |
+| `dryw_hang_bsmt` | **Drywall hang - basement** | Drywall crew | 0% | 5.06 | Tue Apr 20, 2027 | Tue Apr 27, 2027 |
+| `insp_board` | **Wallboard inspection** | inspection |  |  | Mon May 3, 2027 | Mon May 3, 2027 |
+| `dryw_fin_main` | Drywall finish - main floor | Drywall crew | 0% | 2.7 | Wed May 12, 2027 | Fri May 14, 2027 |
+| `dryw_fin_bsmt` | **Drywall finish - basement** | Drywall crew | 0% | 6.18 | Tue May 4, 2027 | Wed May 12, 2027 |
+| `pant_main` | Paint - main floor | Paint crew | 0% | 3.92 | Wed May 19, 2027 | Tue May 25, 2027 |
+| `pant_bsmt` | Paint - basement | Paint crew | 0% | 4.5 | Thu May 13, 2027 | Wed May 19, 2027 |
+| `tile_main_baths` | **Tile - main baths** | Owner | 0% | 9.75 | Sun Jun 20, 2027 | Sun Jul 25, 2027 |
+| `tile_bsmt_baths` | **Tile - basement baths** | Owner | 0% | 11.5 | Sat May 15, 2027 | Sun Jun 20, 2027 |
+| `cabs_main` | **Cabinets - laundry & main vanities** | Owner | 0% | 2 | Sun Sep 12, 2027 | Sun Sep 19, 2027 |
+| `cabs_bsmt` | **Cabinets - kitchenette & basement vanities** | Owner | 0% | 2.5 | Sun Aug 15, 2027 | Sun Aug 22, 2027 |
+| `ctop_install` | Countertops - install (vendor) | wait |  |  | Sun Sep 19, 2027 | Mon Sep 20, 2027 |
+| `glas_showers` | Shower glass - measure | wait |  |  | Sun Jul 25, 2027 | Sun Aug 8, 2027 |
 | `flor_main` | Flooring - main floor | Flooring crew | 0% | 2.92 | Wed May 26, 2027 | Fri May 28, 2027 |
-| `flor_bsmt` | Flooring - basement | Flooring crew | 0% | 3.08 | Fri May 21, 2027 | Wed May 26, 2027 |
-| `trim_main` | **Doors & trim - main floor** | Owner | 0% | 5.22 | Sat Aug 7, 2027 | Sun Aug 22, 2027 |
-| `trim_bsmt` | **Doors & trim - basement** | Owner | 0% | 5.52 | Sun Jul 18, 2027 | Sat Aug 7, 2027 |
-| `rail_stair` | **Stair guardrail (open to foyer)** | Owner | 0% | 1.5 | Sat Sep 18, 2027 | Sun Sep 19, 2027 |
-| `plum_trim` | **Plumbing trim** | Owner | 0% | 3.5 | Sun Aug 22, 2027 | Sun Sep 5, 2027 |
-| `elec_trim` | Electrical trim | Electrical crew | 4% | 3.8 | Wed May 26, 2027 | Tue Jun 1, 2027 |
-| `hvac_trim` | **HVAC trim** | Owner | 0% | 3 | Sun Sep 5, 2027 | Sat Sep 18, 2027 |
-| `insp_final` | **Final inspection** | inspection |  |  | Tue Sep 21, 2027 | Tue Sep 21, 2027 |
-| `pant_touchup` | Paint touch-up | Paint crew | 0% | 2 | Mon Aug 23, 2027 | Tue Aug 24, 2027 |
-| `punch_clean` | **Punch list & clean** | Owner | 0% | 3 | Sat Sep 25, 2027 | Sat Oct 2, 2027 |
-| `mile_movein` | **Move-in** | milestone |  |  | Sat Oct 2, 2027 | Sat Oct 2, 2027 |
+| `flor_bsmt` | Flooring - basement | Flooring crew | 0% | 3.52 | Thu May 20, 2027 | Tue May 25, 2027 |
+| `trim_main` | **Doors & trim - main floor** | Owner | 0% | 5.22 | Sun Aug 22, 2027 | Sun Sep 12, 2027 |
+| `trim_bsmt` | **Doors & trim - basement** | Owner | 0% | 6.18 | Sun Jul 25, 2027 | Sun Aug 15, 2027 |
+| `clos_main` | **Closet rods & shelving - main floor** | Owner | 0% | 1.5 | Sun Oct 10, 2027 | Sat Oct 16, 2027 |
+| `clos_bsmt` | **Closet rods & shelving - basement** | Owner | 0% | 1 | Sat Oct 16, 2027 | Sun Oct 17, 2027 |
+| `rail_stair` | **Stair guardrail (open to foyer)** | Owner | 0% | 1.5 | Sun Sep 19, 2027 | Sat Sep 25, 2027 |
+| `plum_trim` | **Plumbing trim** | Owner | 0% | 3.5 | Sat Sep 25, 2027 | Sat Oct 9, 2027 |
+| `elec_trim` | Electrical trim | Electrical crew | 5% | 3.72 | Wed May 26, 2027 | Tue Jun 1, 2027 |
+| `hvac_trim` | **HVAC trim** | Owner | 0% | 1.12 | Sat Oct 9, 2027 | Sun Oct 10, 2027 |
+| `insp_final` | Final inspection | inspection |  |  | Tue Oct 12, 2027 | Tue Oct 12, 2027 |
+| `pant_touchup` | Paint touch-up | Paint crew | 0% | 2 | Mon Sep 13, 2027 | Tue Sep 14, 2027 |
+| `punch_clean` | **Punch list & clean** | Owner | 0% | 3 | Sun Oct 17, 2027 | Sat Oct 30, 2027 |
+| `mile_movein` | **Move-in** | milestone |  |  | Sat Oct 30, 2027 | Sat Oct 30, 2027 |

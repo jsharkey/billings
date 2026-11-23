@@ -79,34 +79,38 @@ inspections:
 
 # ---------------------------------------------------------------------------
 # Areas. `scale` sizes room-scaled work (framing, drywall, paint, ...)
-# relative to a typical ~12x12 room. `tags` select which checklist items apply.
+# relative to a typical ~12x12 room (scale = floor area / 144 sq ft; basement
+# scales measured from plan A-100). `tags` select which checklist items apply:
+#   finished_ceiling - existing finished ceiling; new lighting is fished through it
+#   dbl_partition    - new partitions get 2 layers of 5/8" board each side (A-100 legend)
+#   walk_in          - has a walk-in closet
 # ---------------------------------------------------------------------------
 areas:
   house:            {name: Whole house,            floor: house, scale: 1.0, tags: [house]}
 
   main_kitchen:     {name: Kitchen,                floor: main,  scale: 1.2, tags: [kitchen, wet]}
   main_dining:      {name: Dining room,            floor: main,  scale: 0.9, tags: []}
-  main_living:      {name: Living room,            floor: main,  scale: 1.2, tags: [ceiling_patch]}
-  main_foyer:       {name: Foyer & coat closet,    floor: main,  scale: 0.6, tags: []}
+  main_living:      {name: Living room,            floor: main,  scale: 1.2, tags: [ceiling_patch, finished_ceiling]}
+  main_foyer:       {name: Foyer & coat closet,    floor: main,  scale: 0.6, tags: [finished_ceiling]}
   main_laundry:     {name: Laundry room,           floor: main,  scale: 0.6, tags: [laundry, wet, ceiling_new]}
   main_pantry:      {name: Walk-in pantry,         floor: main,  scale: 0.4, tags: [ceiling_new]}
   main_mud:         {name: Mud room & key drop,    floor: main,  scale: 0.5, tags: [ceiling_new]}
-  main_hall_bath:   {name: Hall bath (north),      floor: main,  scale: 0.6, tags: [bath, wet, tub, ceiling_patch]}
-  main_ens_bath:    {name: Ensuite bath & WIC (south), floor: main, scale: 0.8, tags: [bath, wet, shower, ceiling_patch]}
-  main_bed1:        {name: Bedroom 1 / nursery (north), floor: main, scale: 0.9, tags: [bedroom]}
-  main_bed2:        {name: Ensuite bedroom 2 (south), floor: main, scale: 1.0, tags: [bedroom, ceiling_patch]}
+  main_hall_bath:   {name: Hall bath (north),      floor: main,  scale: 0.6, tags: [bath, wet, tub, ceiling_patch, finished_ceiling]}
+  main_ens_bath:    {name: Ensuite bath & WIC (south), floor: main, scale: 0.8, tags: [bath, wet, shower, ceiling_patch, finished_ceiling, walk_in]}
+  main_bed1:        {name: Bedroom 1 / nursery (north), floor: main, scale: 0.9, tags: [bedroom, finished_ceiling]}
+  main_bed2:        {name: Ensuite bedroom 2 (south), floor: main, scale: 1.0, tags: [bedroom, ceiling_patch, finished_ceiling]}
 
-  bsmt_office:      {name: Home office,            floor: bsmt,  scale: 0.9, tags: [ceiling_new]}
-  bsmt_play:        {name: Play room,              floor: bsmt,  scale: 1.1, tags: [ceiling_new]}
-  bsmt_storage:     {name: Storage room,           floor: bsmt,  scale: 0.6, tags: [ceiling_new]}
-  bsmt_game:        {name: Game room,              floor: bsmt,  scale: 1.1, tags: [ceiling_new]}
-  bsmt_family:      {name: Family room,            floor: bsmt,  scale: 1.4, tags: [ceiling_new]}
-  bsmt_kitchenette: {name: Kitchenette,            floor: bsmt,  scale: 0.7, tags: [kitchen, wet, ceiling_new]}
-  bsmt_mech:        {name: Mechanical closet,      floor: bsmt,  scale: 0.3, tags: [mech, ceiling_new]}
+  bsmt_office:      {name: Home office,            floor: bsmt,  scale: 1.2,  tags: [ceiling_new, dbl_partition]}   # ~15'-10" x 10'-10"
+  bsmt_play:        {name: Play room,              floor: bsmt,  scale: 1.25, tags: [ceiling_new, dbl_partition]}   # ~16'-8" x 10'-10"
+  bsmt_storage:     {name: Storage room,           floor: bsmt,  scale: 0.9,  tags: [ceiling_new, dbl_partition]}   # ~14'-0" x 9'-6"
+  bsmt_game:        {name: Game room,              floor: bsmt,  scale: 1.25, tags: [ceiling_new, dbl_partition]}   # ~18'-10" x 9'-8"
+  bsmt_family:      {name: Family room,            floor: bsmt,  scale: 1.6,  tags: [ceiling_new, dbl_partition]}   # ~18' x 15', less stair & mech
+  bsmt_kitchenette: {name: Kitchenette,            floor: bsmt,  scale: 0.7, tags: [kitchen, wet, ceiling_new, dbl_partition]}
+  bsmt_mech:        {name: Mechanical closet,      floor: bsmt,  scale: 0.3, tags: [mech, ceiling_new, dbl_partition]}
   bsmt_hall_bath:   {name: Basement hall bath,     floor: bsmt,  scale: 0.6, tags: [bath, wet, shower, ceiling_new]}
-  bsmt_ens_bath:    {name: Basement ensuite bath,  floor: bsmt,  scale: 0.6, tags: [bath, wet, shower, ceiling_new]}
-  bsmt_bed1:        {name: Basement bedroom 1,     floor: bsmt,  scale: 0.9, tags: [bedroom, ceiling_new]}
-  bsmt_bed2:        {name: Basement ensuite bedroom 2, floor: bsmt, scale: 1.0, tags: [bedroom, ceiling_new]}
+  bsmt_ens_bath:    {name: Basement ensuite bath,  floor: bsmt,  scale: 0.6, tags: [bath, wet, shower, ceiling_new, dbl_partition]}
+  bsmt_bed1:        {name: Basement bedroom 1,     floor: bsmt,  scale: 0.9, tags: [bedroom, ceiling_new, dbl_partition]}
+  bsmt_bed2:        {name: Basement ensuite bedroom 2, floor: bsmt, scale: 1.0, tags: [bedroom, ceiling_new, dbl_partition]}
 
 # ---------------------------------------------------------------------------
 # Checklist templates. Each item is `effort` (crew-days per area) or
@@ -139,10 +143,13 @@ templates:
   plum_rough:
     label: Plumbing rough
     items:
-      dwv: 1.0
-      vents: 0.5
-      supply: 0.75
-      stubouts: 0.25
+      dwv: {effort: 1.0, tags: [kitchen, bath]}
+      vents: {effort: 0.5, tags: [kitchen, bath]}
+      supply: {effort: 0.75, tags: [kitchen, bath]}
+      stubouts: {effort: 0.25, tags: [kitchen, bath]}
+      washer_box: {effort: 0.5, tags: [laundry]}        # standpipe, trap, valves
+      sink_drain_vent: {effort: 0.5, tags: [laundry]}
+      sink_supply: {effort: 0.25, tags: [laundry]}
       tub_shower_valve: {effort: 0.5, tags: [tub, shower]}
       shower_pan_prep: {effort: 0.5, tags: [shower]}
       pressure_test: 0.25
@@ -162,6 +169,15 @@ templates:
       hood_duct: {effort: 0.5, tags: [kitchen]}
       dryer_vent: {effort: 0.5, tags: [laundry]}
 
+  # Basement: ceilings are open joists until drywall, so runs go in quickly.
+  hvac_rough_bsmt:
+    label: HVAC rough (open basement ceiling)
+    items:
+      supply_run: 0.25
+      return_run: {effort: 0.25, tags: [bedroom]}
+      bath_fan_duct: {effort: 0.25, tags: [bath]}
+      hood_duct: {effort: 0.5, tags: [kitchen]}
+
   lowv:
     label: Low-voltage rough
     items:
@@ -174,6 +190,7 @@ templates:
     items:
       boxes_low: 0.1
       boxes_high_cans: 0.15     # switch boxes, ceiling boxes, recessed cans
+      cans_fish: {effort: 0.3, tags: [finished_ceiling]}  # cut in & fish lighting wire through existing ceiling
       homeruns: 0.1
       switch_legs: 0.05
       made_up_grounds: 0.1
@@ -189,7 +206,7 @@ templates:
     items:
       ext_walls_main: 2.0
       ext_walls_bsmt: 2.0
-      rim_joists: 0.5
+      rim_joists: 1.0
       interior_sound: 2.0    # baths, bedrooms, office
 
   # Ceilings: tag an area `ceiling_new` (full new ceiling) or `ceiling_patch`
@@ -199,6 +216,7 @@ templates:
     scaled: true
     items:
       walls: 0.22
+      partitions_2nd_layer: {effort: 0.15, tags: [dbl_partition]}
       ceiling: {effort: 0.13, tags: [ceiling_new]}
       ceiling_patch: {effort: 0.03, tags: [ceiling_patch]}
 
@@ -222,6 +240,7 @@ templates:
     items:
       backer_board: 0.5
       shower_pan: {effort: 1.0, tags: [shower]}
+      waterproofing: {effort: 0.75, tags: [shower]}   # membrane, seams, cure
       wall_tile: {effort: 2.0, tags: [shower, tub]}
       floor_tile: 1.0
       grout_seal: 0.5
@@ -239,6 +258,19 @@ templates:
       doors_casing: 0.4
       baseboard: 0.2
 
+  cabs:
+    label: Cabinets & vanities
+    items:
+      kitchenette_cabs: {effort: 1.5, tags: [kitchen]}
+      vanity: {effort: 0.5, tags: [bath]}
+      laundry_cabs: {effort: 1.0, tags: [laundry]}
+
+  clos:
+    label: Closet rods & shelving
+    items:
+      rods_shelving: 0.25
+      walk_in: {effort: 0.5, tags: [walk_in]}
+
   plum_trim:
     label: Plumbing trim
     items:
@@ -246,15 +278,17 @@ templates:
 
   elec_trim:
     label: Electrical trim
+    scaled: true
     items:
-      devices_fixtures: 0.15
+      devices_fixtures: 0.17
       panel_labels: {effort: 0.5, tags: [house]}
 
   hvac_trim:
     label: HVAC trim
+    scaled: true
     items:
-      registers_grilles: 0.1
-      bath_fan: {effort: 0.25, tags: [bath]}
+      registers_grilles: 0.04
+      bath_fan: {effort: 0.15, tags: [bath]}
 
 # ---------------------------------------------------------------------------
 # Tasks = gantt bars. One of:
@@ -307,14 +341,14 @@ tasks:
     name: HVAC rough - basement east
     section: HVAC
     crew: owner
-    template: hvac_rough
+    template: hvac_rough_bsmt
     areas: [bsmt_family, bsmt_kitchenette, bsmt_hall_bath, bsmt_ens_bath, bsmt_bed1, bsmt_bed2]
     after: [hvac_house]
   - id: hvac_bsmt_west
     name: HVAC rough - basement west
     section: HVAC
     crew: owner
-    template: hvac_rough
+    template: hvac_rough_bsmt
     areas: [bsmt_office, bsmt_play, bsmt_storage, bsmt_game]
     after: [hvac_house, fram_bsmt_west]
   - id: lowv_all
@@ -408,7 +442,10 @@ tasks:
     after: [dryw_fin_bsmt]
   - {id: tile_main_baths,   name: Tile - main baths,            section: Finishes, crew: owner, template: tile, areas: [main_hall_bath, main_ens_bath], after: [dryw_fin_main]}
   - {id: tile_bsmt_baths,   name: Tile - basement baths,        section: Finishes, crew: owner, template: tile, areas: [bsmt_hall_bath, bsmt_ens_bath], after: [dryw_fin_bsmt]}
-  - {id: ctop_install,      name: Countertops - install (vendor), section: Finishes, lag: 1, after: [pant_main, pant_bsmt, tile_main_baths, tile_bsmt_baths]}
+  - {id: cabs_main,         name: Cabinets - laundry & main vanities, section: Finishes, crew: owner, template: cabs, areas: [main_laundry, main_hall_bath, main_ens_bath], after: [pant_main, tile_main_baths]}
+  - {id: cabs_bsmt,         name: Cabinets - kitchenette & basement vanities, section: Finishes, crew: owner, template: cabs, areas: [bsmt_kitchenette, bsmt_hall_bath, bsmt_ens_bath], after: [pant_bsmt, tile_bsmt_baths]}
+  - {id: ctop_install,      name: Countertops - install (vendor), section: Finishes, lag: 1, after: [cabs_main, cabs_bsmt]}
+  - {id: glas_showers,      name: Shower glass - measure, fabricate & install (vendor), section: Finishes, lag: 14, after: [tile_main_baths, tile_bsmt_baths]}
   - id: flor_main
     name: Flooring - main floor
     section: Finishes
@@ -437,6 +474,8 @@ tasks:
     template: trim
     areas: [bsmt_office, bsmt_play, bsmt_storage, bsmt_game, bsmt_family, bsmt_kitchenette, bsmt_mech, bsmt_hall_bath, bsmt_ens_bath, bsmt_bed1, bsmt_bed2]
     after: [flor_bsmt]
+  - {id: clos_main,         name: Closet rods & shelving - main floor, section: Finishes, crew: owner, template: clos, areas: [main_foyer, main_hall_bath, main_ens_bath, main_bed1], after: [trim_main]}
+  - {id: clos_bsmt,         name: Closet rods & shelving - basement, section: Finishes, crew: owner, template: clos, areas: [bsmt_office, bsmt_game, bsmt_bed1, bsmt_bed2], after: [trim_bsmt]}
   - {id: rail_stair,        name: Stair guardrail (open to foyer), section: Finishes, crew: owner, effort: 1.5, after: [flor_main]}
 
   # --- Trim-out ---------------------------------------------------------------
@@ -467,7 +506,7 @@ tasks:
   # --- Closeout ---------------------------------------------------------------
   - {id: insp_final,        name: Final inspection,             section: Inspections, inspection: county, after: [plum_trim, elec_trim, hvac_trim, rail_stair]}
   - {id: pant_touchup,      name: Paint touch-up,               section: Closeout, crew: pant, effort: 2, after: [trim_main, trim_bsmt]}
-  - {id: punch_clean,       name: Punch list & clean,           section: Closeout, crew: owner, effort: 3, after: [pant_touchup, insp_final]}
+  - {id: punch_clean,       name: Punch list & clean,           section: Closeout, crew: owner, effort: 3, after: [pant_touchup, insp_final, glas_showers, clos_main, clos_bsmt]}
   - {id: mile_movein,       name: Move-in,                      section: Closeout, milestone: true, after: [punch_clean]}
 
 # ---------------------------------------------------------------------------

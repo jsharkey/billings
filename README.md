@@ -60,4 +60,5 @@ browser until you reset them or the committed status changes.
 | `hvac_` | heating/ventilation | `flor_` | flooring |
 | `lowv_` | low-voltage | `pant_` | paint |
 | `insp_` | inspections | `trim_` | doors & trim |
-| `mile_` | milestones | | |
+| `mile_` | milestones | `cabs_` | cabinets & vanities |
+| `clos_` | closet rods & shelving | `glas_` | shower glass |
