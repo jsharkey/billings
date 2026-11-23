@@ -478,15 +478,51 @@ tasks:
 # ---------------------------------------------------------------------------
 status:
   house:
-    plum_main: 0.5            # trunk lines & water heater partial
+    plum_main: 0.5
     insl: {ext_walls_main: 0.5, ext_walls_bsmt: 0.5}
-
-  main_bed1:      {fram: done}
-  main_bed2:      {fram: done}
-  main_hall_bath: {fram: done, plum_rough: 0.5}
-  main_ens_bath:  {fram: 0.5}
-  main_kitchen:   {fram: done, plum_rough: done, elec_rough: 0.5}
-  main_living:    {fram: 0.5}
-
-  bsmt_hall_bath: {plum_rough: 0.5}
-  bsmt_ens_bath:  {plum_rough: 0.5}
+  main_kitchen:
+    fram: done
+    plum_rough: done
+    hvac_rough: {hood_duct: 0.5}
+    elec_rough: {boxes_low: done, homeruns: 0.5, made_up_grounds: 0.5}
+    elec_trim: 0.5
+  main_dining:
+    elec_rough: {boxes_low: done, boxes_high: done, ceiling_boxes_cans: done, homeruns: 0.5, made_up_grounds: 0.5}
+    elec_trim: 0.5
+  main_living:
+    fram: {walls: 0.5, headers: done, blocking: done}
+    elec_rough: {boxes_low: 0.5}
+  main_foyer:
+    elec_rough: {boxes_low: 0.5}
+  main_laundry:
+    demo: {demo: done}
+  main_hall_bath:
+    fram: done
+    plum_rough: {dwv: done, vents: 0.5, supply: 0.5, stubouts: 0.5, tub_shower_valve: 0.5, pressure_test: 0.5}
+    hvac_rough: {bath_fan_duct: 0.5}
+    elec_rough: {boxes_low: 0.5}
+  main_ens_bath:
+    fram: {walls: 0.5, headers: done}
+    elec_rough: {boxes_low: 0.5}
+  main_bed1:
+    fram: done
+    elec_rough: {boxes_low: 0.5}
+  main_bed2:
+    fram: done
+    elec_rough: {boxes_low: 0.5}
+  bsmt_family:
+    elec_rough: {boxes_low: 0.5}
+  bsmt_kitchenette:
+    plum_rough: {dwv: 0.5, vents: 0.5}
+  bsmt_mech:
+    elec_rough: {boxes_low: 0.5}
+  bsmt_hall_bath:
+    plum_rough: {dwv: done, vents: done, supply: 0.5, stubouts: 0.5, pressure_test: done}
+    elec_rough: {boxes_low: 0.5}
+  bsmt_ens_bath:
+    plum_rough: {dwv: done, vents: done, pressure_test: done}
+    elec_rough: {boxes_low: 0.5}
+  bsmt_bed1:
+    elec_rough: {boxes_low: 0.5}
+  bsmt_bed2:
+    elec_rough: {boxes_low: 0.5}
