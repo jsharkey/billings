@@ -80,27 +80,27 @@ areas:
 
   main_kitchen:     {name: Kitchen,                floor: main,  scale: 1.2, tags: [kitchen, wet]}
   main_dining:      {name: Dining room,            floor: main,  scale: 0.9, tags: []}
-  main_living:      {name: Living room,            floor: main,  scale: 1.2, tags: []}
+  main_living:      {name: Living room,            floor: main,  scale: 1.2, tags: [ceiling_patch]}
   main_foyer:       {name: Foyer & coat closet,    floor: main,  scale: 0.6, tags: []}
-  main_laundry:     {name: Laundry room,           floor: main,  scale: 0.6, tags: [laundry, wet]}
-  main_pantry:      {name: Walk-in pantry,         floor: main,  scale: 0.4, tags: []}
-  main_mud:         {name: Mud room & key drop,    floor: main,  scale: 0.5, tags: []}
-  main_hall_bath:   {name: Hall bath (north),      floor: main,  scale: 0.6, tags: [bath, wet, tub]}
-  main_ens_bath:    {name: Ensuite bath & WIC (south), floor: main, scale: 0.8, tags: [bath, wet, shower]}
+  main_laundry:     {name: Laundry room,           floor: main,  scale: 0.6, tags: [laundry, wet, ceiling_new]}
+  main_pantry:      {name: Walk-in pantry,         floor: main,  scale: 0.4, tags: [ceiling_new]}
+  main_mud:         {name: Mud room & key drop,    floor: main,  scale: 0.5, tags: [ceiling_new]}
+  main_hall_bath:   {name: Hall bath (north),      floor: main,  scale: 0.6, tags: [bath, wet, tub, ceiling_patch]}
+  main_ens_bath:    {name: Ensuite bath & WIC (south), floor: main, scale: 0.8, tags: [bath, wet, shower, ceiling_patch]}
   main_bed1:        {name: Bedroom 1 / nursery (north), floor: main, scale: 0.9, tags: [bedroom]}
-  main_bed2:        {name: Ensuite bedroom 2 (south), floor: main, scale: 1.0, tags: [bedroom]}
+  main_bed2:        {name: Ensuite bedroom 2 (south), floor: main, scale: 1.0, tags: [bedroom, ceiling_patch]}
 
-  bsmt_office:      {name: Home office,            floor: bsmt,  scale: 0.9, tags: []}
-  bsmt_play:        {name: Play room,              floor: bsmt,  scale: 1.1, tags: []}
-  bsmt_storage:     {name: Storage room,           floor: bsmt,  scale: 0.6, tags: []}
-  bsmt_game:        {name: Game room,              floor: bsmt,  scale: 1.1, tags: []}
-  bsmt_family:      {name: Family room,            floor: bsmt,  scale: 1.4, tags: []}
-  bsmt_kitchenette: {name: Kitchenette,            floor: bsmt,  scale: 0.7, tags: [kitchen, wet]}
-  bsmt_mech:        {name: Mechanical closet,      floor: bsmt,  scale: 0.3, tags: [mech]}
-  bsmt_hall_bath:   {name: Basement hall bath,     floor: bsmt,  scale: 0.6, tags: [bath, wet, shower]}
-  bsmt_ens_bath:    {name: Basement ensuite bath,  floor: bsmt,  scale: 0.6, tags: [bath, wet, shower]}
-  bsmt_bed1:        {name: Basement bedroom 1,     floor: bsmt,  scale: 0.9, tags: [bedroom]}
-  bsmt_bed2:        {name: Basement ensuite bedroom 2, floor: bsmt, scale: 1.0, tags: [bedroom]}
+  bsmt_office:      {name: Home office,            floor: bsmt,  scale: 0.9, tags: [ceiling_new]}
+  bsmt_play:        {name: Play room,              floor: bsmt,  scale: 1.1, tags: [ceiling_new]}
+  bsmt_storage:     {name: Storage room,           floor: bsmt,  scale: 0.6, tags: [ceiling_new]}
+  bsmt_game:        {name: Game room,              floor: bsmt,  scale: 1.1, tags: [ceiling_new]}
+  bsmt_family:      {name: Family room,            floor: bsmt,  scale: 1.4, tags: [ceiling_new]}
+  bsmt_kitchenette: {name: Kitchenette,            floor: bsmt,  scale: 0.7, tags: [kitchen, wet, ceiling_new]}
+  bsmt_mech:        {name: Mechanical closet,      floor: bsmt,  scale: 0.3, tags: [mech, ceiling_new]}
+  bsmt_hall_bath:   {name: Basement hall bath,     floor: bsmt,  scale: 0.6, tags: [bath, wet, shower, ceiling_new]}
+  bsmt_ens_bath:    {name: Basement ensuite bath,  floor: bsmt,  scale: 0.6, tags: [bath, wet, shower, ceiling_new]}
+  bsmt_bed1:        {name: Basement bedroom 1,     floor: bsmt,  scale: 0.9, tags: [bedroom, ceiling_new]}
+  bsmt_bed2:        {name: Basement ensuite bedroom 2, floor: bsmt, scale: 1.0, tags: [bedroom, ceiling_new]}
 
 # ---------------------------------------------------------------------------
 # Checklist templates. Each item is `effort` (crew-days per area) or
@@ -187,19 +187,23 @@ templates:
       rim_joists: 0.5
       interior_sound: 2.0    # baths, bedrooms, office
 
+  # Ceilings: tag an area `ceiling_new` (full new ceiling) or `ceiling_patch`
+  # (existing ceiling, patch holes). No tag = no ceiling work.
   dryw_hang:
     label: Drywall hang
     scaled: true
     items:
-      hang: 0.35
+      walls: 0.22
+      ceiling: {effort: 0.13, tags: [ceiling_new]}
+      ceiling_patch: {effort: 0.03, tags: [ceiling_patch]}
 
   dryw_fin:
     label: Drywall finish
     scaled: true
     items:
-      tape: 0.2
-      mud_coats: 0.3
-      sand: 0.1
+      walls: 0.4                  # tape, mud coats, sand
+      ceiling: {effort: 0.2, tags: [ceiling_new]}
+      ceiling_patch: {effort: 0.1, tags: [ceiling_patch]}
 
   pant:
     label: Paint
