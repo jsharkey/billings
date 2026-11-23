@@ -140,17 +140,20 @@ def build_tasks(cfg: dict) -> dict[str, Task]:
                     if a not in areas:
                         raise ScheduleError(f"{tid}: unknown area {a!r}")
                     area = areas[a]
-                    scale = float(area.get("scale", 1.0)) if tpl.get("scaled") else 1.0
+                    area_scale = float(area.get("scale", 1.0))
                     atags = set(area.get("tags") or [])
                     st = (status.get(a) or {}).get(tname)
                     for iname, spec in tpl["items"].items():
+                        scaled = bool(tpl.get("scaled"))
                         if isinstance(spec, dict):
                             eff = float(spec["effort"])
+                            scaled = bool(spec.get("scaled", scaled))   # per-item override
                             itags = set(spec.get("tags") or [])
                             if itags and not (itags & atags):
                                 continue
                         else:
                             eff = float(spec)
+                        scale = area_scale if scaled else 1.0
                         prog = parse_state(st.get(iname) if isinstance(st, dict) else st)
                         if prog < 0:   # na
                             t.na_items.append((a, tname, iname))

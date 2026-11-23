@@ -114,8 +114,9 @@ areas:
 
 # ---------------------------------------------------------------------------
 # Checklist templates. Each item is `effort` (crew-days per area) or
-# {effort, tags}: tags limit the item to areas having ANY of those tags.
-# `scaled: true` multiplies effort by the area's scale.
+# {effort, tags, scaled}: tags limit the item to areas having ANY of those tags.
+# `scaled: true` on a template multiplies effort by the area's scale; an item's
+# own `scaled` overrides that.
 # ---------------------------------------------------------------------------
 templates:
   demo:
@@ -190,8 +191,8 @@ templates:
     items:
       boxes_low: 0.1
       boxes_high_cans: 0.15     # switch boxes, ceiling boxes, recessed cans
-      cans_fish: {effort: 0.3, tags: [finished_ceiling]}  # cut in & fish lighting wire through existing ceiling
-      homeruns: 0.1
+      cans_attic: {effort: 0.1, tags: [finished_ceiling]}  # extra for finished ceilings: route romex via attic to wafer cut-ins
+      homeruns: {effort: 0.1, scaled: false}   # same per room regardless of size
       switch_legs: 0.05
       made_up_grounds: 0.1
 
